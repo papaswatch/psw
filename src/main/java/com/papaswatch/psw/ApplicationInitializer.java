@@ -8,6 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 public class ApplicationInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        log.info("Application initialized");
+        log.info("Application initialized..");
     }
 }
