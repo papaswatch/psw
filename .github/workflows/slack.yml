@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Send PR comment notification to Slack
-        uses: slackapi/slack-github-action@v1.24.0  # 올바른 액션 사용
+        uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
             {
