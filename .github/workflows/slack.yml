@@ -13,11 +13,9 @@ jobs:
       - name: Send PR comment notification to Slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          payload: >
+          payload: |
             {
-              "text": "📢 *New PR Comment on* <${{ github.event.issue.html_url }}|${{ github.event.issue.title }}>\n\n
-              💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}\n\n
-              🔗 *View Comment:* <${{ github.event.comment.html_url }}|Click Here>"
+              "text": "📢 *New PR Comment on* <${{ github.event.issue.html_url }}|${{ github.event.issue.title }}>\n\n💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}\n\n🔗 <${{ github.event.comment.html_url }}|View Comment>"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_COMMENT_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
