@@ -15,30 +15,7 @@ jobs:
         with:
           payload: |
             {
-              "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}"
-                  }
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Comment"
-                      },
-                      "url": "${{ github.event.comment.html_url }}",
-                      "style": "primary"
-                    }
-                  ]
-                }
-              ]
+"text": ":확성기: New PR Comment on *${{ github.event.issue.title }}*\ntitle: View Comment\nURL: ${{ github.event.comment.html_url }}\ntext: *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_COMMENT_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
