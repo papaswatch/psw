@@ -2,8 +2,8 @@ name: Notify Slack on PR Comments
 
 on:
   issue_comment:
-    types: [created]  # 댓글이 새로 생성될 때만 실행
-  workflow_dispatch:
+    types: [created]  # 댓글이 새로 생성될 때 실행
+  workflow_dispatch:  # 수동 실행 가능하도록 설정
 
 jobs:
   send_to_slack:
@@ -11,18 +11,20 @@ jobs:
 
     steps:
       - name: Send PR comment notification to Slack
-        uses: rtCamp/action-slack-notify@v2
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}  # GitHub Secrets에 저장된 Slack Webhook URL
+        uses: slackapi/slack-github-action@v1.24.0  # 올바른 액션 사용
         with:
-          text: "📢 New PR Comment on *${{ github.event.issue.title }}*"
-          attachments: |
-            [
-              {
-                "title": "View Comment",
-                "title_link": "${{ github.event.comment.html_url }}",
-                "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}",
-                "color": "#36a64f"
-              }
-            ]
+          payload: |
+            {
+              "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
+              "attachments": [
+                {
+                  "title": "View Comment",
+                  "title_link": "${{ github.event.comment.html_url }}",
+                  "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}",
+                  "color": "#36a64f"
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
 
