@@ -3,6 +3,7 @@ name: Notify Slack on PR Comments
 on:
   issue_comment:
     types: [created]  # 댓글이 새로 생성될 때만 실행
+  workflow_dispatch:
 
 jobs:
   send_to_slack:
