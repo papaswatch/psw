@@ -26,5 +26,5 @@ jobs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_COMMENT_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
 

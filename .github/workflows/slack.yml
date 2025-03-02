@@ -10,18 +10,73 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug Payload (Check JSON Format)
+        run: echo '{
+              "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "📢 New PR Comment on *${{ github.event.issue.title }}*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Comment"
+                      },
+                      "url": "${{ github.event.comment.html_url }}"
+                    }
+                  ]
+                }
+              ]
+            }'
+
       - name: Send PR comment notification to Slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
           payload: |
             {
               "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
-              "attachments": [
+              "blocks": [
                 {
-                  "title": "View Comment",
-                  "title_link": "${{ github.event.comment.html_url }}",
-                  "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}",
-                  "color": "#36a64f"
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "📢 New PR Comment on *${{ github.event.issue.title }}*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Comment"
+                      },
+                      "url": "${{ github.event.comment.html_url }}"
+                    }
+                  ]
                 }
               ]
             }
