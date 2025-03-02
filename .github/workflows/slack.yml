@@ -16,12 +16,27 @@ jobs:
           payload: |
             {
               "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
-              "attachments": [
+              "blocks": [
                 {
-                  "title": "View Comment",
-                  "title_link": "${{ github.event.comment.html_url }}",
-                  "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}",
-                  "color": "#36a64f"
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Comment"
+                      },
+                      "url": "${{ github.event.comment.html_url }}",
+                      "style": "primary"
+                    }
+                  ]
                 }
               ]
             }
