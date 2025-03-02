@@ -13,10 +13,10 @@ jobs:
       - name: Send PR comment notification to Slack
         uses: slackapi/slack-github-action@v1.24.0
         with:
-          payload: |
+          payload: >
             {
-              "text": "📢 *New PR Comment on* <${{ github.event.issue.html_url }}|${{ github.event.issue.title }}>\n
-              💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}\n
+              "text": "📢 *New PR Comment on* <${{ github.event.issue.html_url }}|${{ github.event.issue.title }}>\n\n
+              💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}\n\n
               🔗 *View Comment:* <${{ github.event.comment.html_url }}|Click Here>"
             }
         env:
