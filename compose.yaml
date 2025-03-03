@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: papas-postgresql
+    environment:
+      POSTGRES_DB: papaswatch
+      POSTGRES_USER: twave
+      POSTGRES_PASSWORD: eva77
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
