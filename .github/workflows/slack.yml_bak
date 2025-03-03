@@ -15,7 +15,15 @@ jobs:
         with:
           payload: |
             {
-              "text": "📢 *New PR Comment on* <${{ github.event.issue.html_url }}|${{ github.event.issue.title }}>\n\n💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}\n\n🔗 <${{ github.event.comment.html_url }}|View Comment>"
+              "text": "📢 New PR Comment on *${{ github.event.issue.title }}*",
+              "attachments": [
+                {
+                  "title": "View Comment",
+                  "title_link": "${{ github.event.comment.html_url }}",
+                  "text": "💬 *Comment by @${{ github.actor }}:* ${{ github.event.comment.body }}",
+                  "color": "#36a64f"
+                }
+              ]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_COMMENT_WEBHOOK }}  # GitHub Secrets에서 Webhook 가져오기
