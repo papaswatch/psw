@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### container ###
+./data/postgres/
