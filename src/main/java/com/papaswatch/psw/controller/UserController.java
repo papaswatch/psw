@@ -2,6 +2,7 @@ package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public boolean login(@RequestBody KeyValue<String, String> userInfo) {
-        return userService.login(userInfo);
+    public boolean login(@RequestBody KeyValue<String, String> userInfo, HttpSession session) {
+        return userService.login(userInfo, session);
     }
 }
