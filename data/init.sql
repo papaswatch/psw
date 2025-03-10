@@ -12,7 +12,7 @@ CREATE TABLE papas.product_qna_mapp (
                                     qna_id	serial	NOT NULL
 );
 
-CREATE TABLE papas.member_social (
+CREATE TABLE papas.user_social (
                                  user_id	serial	NOT NULL,
                                  id_social	boolean	NULL,
                                  social_provider	varchar(20)	NULL,
@@ -66,7 +66,7 @@ CREATE TABLE papas.product (
                            price	int	NULL
 );
 
-CREATE TABLE papas.member_role (
+CREATE TABLE papas.user_role (
                                user_id	serial	NOT NULL,
                                role	varchar(10)	NULL,
                                seller_rank	varchar(10)	NULL,
@@ -122,7 +122,7 @@ CREATE TABLE papas.payment (
                            payment_amount	int	NULL
 );
 
-CREATE TABLE papas.member_info (
+CREATE TABLE papas.user_info (
                                user_id	serial	NOT NULL,
                                login_id	varchar(50)	NULL,
                                password	varchar(100)	NULL,
@@ -148,7 +148,7 @@ ALTER TABLE papas.product_qna_mapp ADD CONSTRAINT PK_PRODUCT_QNA_MAPP PRIMARY KE
     );
 
 
-ALTER TABLE papas.member_social ADD CONSTRAINT PK_MEMBER_SOCIAL PRIMARY KEY (
+ALTER TABLE papas.user_social ADD CONSTRAINT PK_USER_SOCIAL PRIMARY KEY (
                                                                            user_id
     );
 
@@ -172,7 +172,7 @@ ALTER TABLE papas.product ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (
                                                                product_id
     );
 
-ALTER TABLE papas.member_role ADD CONSTRAINT PK_MEMBER_ROLE PRIMARY KEY (
+ALTER TABLE papas.user_role ADD CONSTRAINT PK_USER_ROLE PRIMARY KEY (
                                                                        user_id
     );
 
@@ -200,7 +200,7 @@ ALTER TABLE papas.payment ADD CONSTRAINT PK_PAYMENT PRIMARY KEY (
                                                                payment_id
     );
 
-ALTER TABLE papas.member_info ADD CONSTRAINT PK_MEMBER_INFO PRIMARY KEY (
+ALTER TABLE papas.user_info ADD CONSTRAINT PK_USER_INFO PRIMARY KEY (
                                                                        user_id
     );
 
@@ -208,16 +208,16 @@ ALTER TABLE papas.product_hashtag_mapp ADD CONSTRAINT PK_PRODUCT_HASHTAG_MAPP PR
                                                                                          product_hashtag_id
     );
 
-ALTER TABLE papas.member_social ADD CONSTRAINT FK_member_info_TO_member_social_1 FOREIGN KEY (
+ALTER TABLE papas.user_social ADD CONSTRAINT FK_user_info_TO_user_social_1 FOREIGN KEY (
                                                                                             user_id
     )
-    REFERENCES papas.member_info (
+    REFERENCES papas.user_info (
                               user_id
         );
 
-ALTER TABLE papas.member_role ADD CONSTRAINT FK_member_info_TO_member_role_1 FOREIGN KEY (
+ALTER TABLE papas.user_role ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (
                                                                                         user_id
     )
-    REFERENCES papas.member_info (
+    REFERENCES papas.user_info (
                               user_id
         );
