@@ -36,12 +36,15 @@ export function Router() {
   return useRoutes([
     {
       element: (
+        /*  `DashboardLayout` 이 좌측 네비게이션, 그리고 상단 헤더를 가지고 렌더링함.  */
         <DashboardLayout>
           <Suspense fallback={renderFallback}>
+            {/*  react-router 라이브러리인데,,? 무슨 용도인지 추후에 파악해보자.ㅋ  */}
             <Outlet />
           </Suspense>
         </DashboardLayout>
       ),
+      /*  어쨋든 라우터에의해서 경로마다 아래 컴포넌트로 라우팅한다는 점.  */
       children: [
         { element: <HomePage />, index: true },
         { path: 'user', element: <UserPage /> },

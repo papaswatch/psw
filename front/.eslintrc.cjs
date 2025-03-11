@@ -25,6 +25,9 @@ module.exports = {
    * 2 ~ 'error'
    */
   rules: {
+    // custom
+    'arrow-body-style': "off",
+
     // general
     'no-alert': 0,
     camelcase: 0,

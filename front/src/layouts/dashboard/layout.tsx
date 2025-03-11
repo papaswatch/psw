@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 
-import { _langs, _notifications } from 'src/_mock';
+import { _langs, _login, _notifications } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -22,6 +22,7 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+import { LoginButton } from '../components/login-button';
 
 // ----------------------------------------------------------------------
 
@@ -70,6 +71,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                     [theme.breakpoints.up(layoutQuery)]: { display: 'none' },
                   }}
                 />
+                {/*  참고!! 이건 모바일용임ㅋㅋㅋㅋㅋㅋㅋㅎㄷㄷ, 데스크탑 용도의 Nav는 아래 `NavDesktop` 찾아.  */}
                 <NavMobile
                   data={navData}
                   open={navOpen}
@@ -80,8 +82,12 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             ),
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
+                {/*  돋보기 부분.(검색)  */}
                 <Searchbar />
-                <LanguagePopover data={_langs} />
+                {/*  Language 설정 아이콘인데, 인단 주석  */}
+                {/* <LanguagePopover data={_langs} /> */}
+                <LoginButton data={_login}/>
+                {/*  종 부분. (알림)  */}
                 <NotificationsPopover data={_notifications} />
                 <AccountPopover
                   data={[
@@ -108,7 +114,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
         />
       }
       /** **************************************
-       * Sidebar
+       * Sidebar 여기가 데스크탑 용도의 사이드 Nav 임.
        *************************************** */
       sidebarSection={
         <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
