@@ -12,17 +12,49 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useRouter } from 'src/routes/hooks';
 
 import { Iconify } from 'src/components/iconify';
+import { useLoginMutation, useMeMutation } from '../../middleware/query/user-query';
+import { KeyValue } from '../../types/common-type';
+import { useUserStore } from '../../middleware/store/user-store';
 
 // ----------------------------------------------------------------------
 
 export function SignInView() {
   const router = useRouter();
 
+  const [userId, setUserId] = useState<string>('')
+  const [pwd, setPwd] = useState<string>('')
   const [showPassword, setShowPassword] = useState(false);
 
+  const {setUser} = useUserStore()
+
+  const {mutateAsync: loginMutateAsync} = useLoginMutation()
+  const {mutateAsync: meMutateAsync} = useMeMutation();
+
   const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+    if (!userId) {
+      alert("사용자 아이디를 입력하세요.")
+      return;
+    }
+    if (!pwd) {
+      alert("사용자 비밀번호를 입력하세요.")
+      return;
+    }
+    const handleLogin = async (req: KeyValue<string, string>): Promise<void> => {
+      return loginMutateAsync(req)
+    }
+
+    /* 로그인을 서버로 요청한다. */
+    handleLogin({ key: userId, value: pwd })
+      .then(() => {
+        /* 요청이 성공이면  */
+        meMutateAsync().then(r => setUser(r))
+        router.push('/');
+      })
+      .catch(() => {
+        console.error("failed to login")
+      })
+
+  }, [loginMutateAsync, meMutateAsync, pwd, router, setUser, userId]);
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -30,7 +62,8 @@ export function SignInView() {
         fullWidth
         name="email"
         label="Email address"
-        defaultValue="hello@gmail.com"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
@@ -43,7 +76,8 @@ export function SignInView() {
         fullWidth
         name="password"
         label="Password"
-        defaultValue="@demo1234"
+        value={pwd}
+        onChange={(e) => setPwd(e.target.value)}
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
