@@ -38,6 +38,7 @@ export type NavContentProps = {
   sx?: SxProps<Theme>;
 };
 
+/* 데스크탑용도의 Nav 임. */
 export function NavDesktop({
   sx,
   data,
@@ -74,7 +75,7 @@ export function NavDesktop({
 }
 
 // ----------------------------------------------------------------------
-
+/* 모바일 용도의 Nav 임. */
 export function NavMobile({
   sx,
   data,
@@ -122,9 +123,10 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
       <Logo />
 
       {slots?.topArea}
-
+      {/* WorkspacesPopover 는 좌측 네비게이션 로고 바로 아래 부분 셀렉트박스임 Team1, Team2, Team3 */}
       <WorkspacesPopover data={workspaces} sx={{ my: 2 }} />
 
+      {/* 네비게이션에서 리스트 부분임. */}
       <Scrollbar fillContent>
         <Box component="nav" display="flex" flex="1 1 auto" flexDirection="column" sx={sx}>
           <Box component="ul" gap={0.5} display="flex" flexDirection="column">

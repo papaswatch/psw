@@ -24,6 +24,7 @@ export type WorkspacesPopoverProps = ButtonBaseProps & {
   }[];
 };
 
+/* WorkspacesPopover 는 좌측 네비게이션 로고 바로 아래 부분 셀렉트박스임 Team1, Team2, Team3 */
 export function WorkspacesPopover({ data = [], sx, ...other }: WorkspacesPopoverProps) {
   const [workspace, setWorkspace] = useState(data[0]);
 

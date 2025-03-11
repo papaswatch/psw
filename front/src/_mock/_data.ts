@@ -19,6 +19,12 @@ export const _myAccount = {
   photoURL: '/assets/images/avatar/avatar-25.webp',
 };
 
+export const _login = {
+  value: 'Login',
+  label: 'Login',
+  icon: '/assets/icons/navbar/ic-login.svg'
+}
+
 // ----------------------------------------------------------------------
 
 export const _users = [...Array(24)].map((_, index) => ({

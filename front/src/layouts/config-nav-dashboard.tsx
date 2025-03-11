@@ -7,6 +7,7 @@ const icon = (name: string) => (
   <SvgColor width="100%" height="100%" src={`/assets/icons/navbar/${name}.svg`} />
 );
 
+/* nav 리스트에 대한 데이터가 여기서 관리됨. */
 export const navData = [
   {
     title: 'Dashboard',
