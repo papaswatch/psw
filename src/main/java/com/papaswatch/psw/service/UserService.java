@@ -4,6 +4,7 @@ import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.domain.dto.LoginUserInfo;
 import com.papaswatch.psw.domain.entity.UserInfo;
 import com.papaswatch.psw.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,11 +29,13 @@ public class UserService {
         if (LoginRequestUserInfo.isPresent()) {
             UserInfo loginRequestUserInfo = LoginRequestUserInfo.get();
             // 세션에 담을 유저 객체를 생성합니다.
-            LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber());
-            // 세션에 유저 정보를 저장합니다.
-            session.setAttribute("USER", user);
+            LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber(), loginRequestUserInfo.getName());
+            
+            session.setAttribute("USER_INFO", user);
+
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(1800);
+            
             return true;
         }
         return false;
