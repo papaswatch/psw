@@ -1,6 +1,7 @@
 package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.KeyValue;
+import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.domain.dto.LoginUserInfo;
 import com.papaswatch.psw.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -27,5 +28,10 @@ public class UserController {
     @GetMapping("/me")
     public LoginUserInfo me(HttpSession session) {
         return (LoginUserInfo) session.getAttribute(SESSION);
+    }
+
+    @PostMapping("/signup")
+    public Response<Boolean> signup(@RequestBody SignupReq signupReq) {
+        return Response.ok(userService.signup(signupReq));
     }
 }

@@ -1,11 +1,11 @@
 package com.papaswatch.psw.repository;
 
-import com.papaswatch.psw.domain.entity.UserInfo;
+import com.papaswatch.psw.domain.entity.UserInfoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserInfo, Long> {
+public interface UserRepository extends JpaRepository<UserInfoEntity, Long> {
 
-    Optional<UserInfo> findUserInfoByLoginIdAndPassword(String loginId, String password);
+    Optional<UserInfoEntity> findUserInfoByLoginIdAndPassword(String loginId, String password);
 }

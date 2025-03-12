@@ -2,13 +2,17 @@ package com.papaswatch.psw.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Table(name = "member_info", schema = "papas")
+@ToString
 @Getter
+@NoArgsConstructor
+@Table(name = "member_info", schema = "papas")
 @Entity
-public class UserInfo {
+public class UserInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -38,4 +42,17 @@ public class UserInfo {
     @Column(name ="is_alive_user")
     private boolean isAliveUser;
 
+    private UserInfoEntity(String loginId, String password, String name, String email, String phoneNumber) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = LocalDateTime.now();
+        this.isAliveUser = true;
+    }
+
+    public static UserInfoEntity createBy(String loginId, String password, String name, String email, String phoneNumber) {
+        return new UserInfoEntity(loginId, password, name, email, phoneNumber);
+    }
 }
