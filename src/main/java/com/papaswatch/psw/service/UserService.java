@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.papaswatch.psw.config.Constant.USER_INFO;
+import static com.papaswatch.psw.config.Constant.USER.SESSION;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class UserService {
             // 세션에 담을 유저 객체를 생성합니다.
             LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber(), loginRequestUserInfo.getName());
             
-            session.setAttribute(USER_INFO, user);
+            session.setAttribute(SESSION, user);
 
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(1800);

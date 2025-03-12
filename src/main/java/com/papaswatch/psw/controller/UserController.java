@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static com.papaswatch.psw.config.Constant.USER_INFO;
+import static com.papaswatch.psw.config.Constant.USER.SESSION;
+
 
 @Slf4j
 @RestController
@@ -25,6 +26,6 @@ public class UserController {
 
     @GetMapping("/me")
     public LoginUserInfo me(HttpSession session) {
-        return (LoginUserInfo) session.getAttribute(USER_INFO);
+        return (LoginUserInfo) session.getAttribute(SESSION);
     }
 }
