@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static com.papaswatch.psw.config.PswConstant.USER_INFO;
+import static com.papaswatch.psw.config.Constant.USER_INFO;
 
 @Slf4j
 @RestController

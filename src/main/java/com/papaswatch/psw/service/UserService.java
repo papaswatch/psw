@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.papaswatch.psw.config.PswConstant.USER_INFO;
+import static com.papaswatch.psw.config.Constant.USER_INFO;
 
 @Slf4j
 @RequiredArgsConstructor
