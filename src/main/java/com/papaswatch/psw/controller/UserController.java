@@ -1,14 +1,15 @@
 package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.KeyValue;
+import com.papaswatch.psw.domain.dto.LoginUserInfo;
 import com.papaswatch.psw.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.papaswatch.psw.config.Constant.USER.SESSION;
+
 
 @Slf4j
 @RestController
@@ -21,5 +22,10 @@ public class UserController {
     @PostMapping("/login")
     public boolean login(@RequestBody KeyValue<String, String> userInfo, HttpSession session) {
         return userService.login(userInfo, session);
+    }
+
+    @GetMapping("/me")
+    public LoginUserInfo me(HttpSession session) {
+        return (LoginUserInfo) session.getAttribute(SESSION);
     }
 }

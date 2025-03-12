@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.papaswatch.psw.config.Constant.USER.SESSION;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service("UserService")
@@ -28,11 +30,13 @@ public class UserService {
         if (LoginRequestUserInfo.isPresent()) {
             UserInfo loginRequestUserInfo = LoginRequestUserInfo.get();
             // 세션에 담을 유저 객체를 생성합니다.
-            LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber());
-            // 세션에 유저 정보를 저장합니다.
-            session.setAttribute("USER", user);
+            LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber(), loginRequestUserInfo.getName());
+            
+            session.setAttribute(SESSION, user);
+
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(1800);
+            
             return true;
         }
         return false;
