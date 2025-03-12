@@ -12,38 +12,72 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { useRouter } from 'src/routes/hooks';
 
 import { Iconify } from 'src/components/iconify';
+import { useLoginMutation, useMeMutation } from '../../middleware/query/user-query';
+import { KeyValue } from '../../types/common-type';
+import { useUserStore } from '../../middleware/store/user-store';
 
 // ----------------------------------------------------------------------
 
 export function SignInView() {
   const router = useRouter();
 
+  const [userId, setUserId] = useState<string>('')
+  const [pwd, setPwd] = useState<string>('')
   const [showPassword, setShowPassword] = useState(false);
 
+  const {setUser} = useUserStore()
+
+  const {mutateAsync: loginMutateAsync} = useLoginMutation()
+  const {mutateAsync: meMutateAsync} = useMeMutation();
+
   const handleSignIn = useCallback(() => {
-    router.push('/');
-  }, [router]);
+    if (!userId) {
+      alert("사용자 아이디를 입력하세요.")
+      return;
+    }
+    if (!pwd) {
+      alert("사용자 비밀번호를 입력하세요.")
+      return;
+    }
+    const handleLogin = async (req: KeyValue<string, string>): Promise<void> => {
+      return loginMutateAsync(req)
+    }
+
+    /* 로그인을 서버로 요청한다. */
+    handleLogin({ key: userId, value: pwd })
+      .then(() => {
+        /* 요청이 성공이면  */
+        meMutateAsync().then(r => setUser(r))
+        router.push('/');
+      })
+      .catch(() => {
+        console.error("failed to login")
+      })
+
+  }, [loginMutateAsync, meMutateAsync, pwd, router, setUser, userId]);
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
         name="email"
-        label="Email address"
-        defaultValue="hello@gmail.com"
+        label="Email"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
         InputLabelProps={{ shrink: true }}
         sx={{ mb: 3 }}
       />
 
       <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
-        Forgot password?
+        비밀번호를 잊어버리셨나요?
       </Link>
 
       <TextField
         fullWidth
         name="password"
-        label="Password"
-        defaultValue="@demo1234"
+        label="비밀번호"
+        value={pwd}
+        onChange={(e) => setPwd(e.target.value)}
         InputLabelProps={{ shrink: true }}
         type={showPassword ? 'text' : 'password'}
         InputProps={{
@@ -66,7 +100,7 @@ export function SignInView() {
         variant="contained"
         onClick={handleSignIn}
       >
-        Sign in
+        로그인
       </LoadingButton>
     </Box>
   );
@@ -74,11 +108,11 @@ export function SignInView() {
   return (
     <>
       <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
-        <Typography variant="h5">Sign in</Typography>
+        <Typography variant="h5">로그인</Typography>
         <Typography variant="body2" color="text.secondary">
-          Don’t have an account?
+          아직 회원이 아니신가요?
           <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-            Get started
+            가입하기
           </Link>
         </Typography>
       </Box>
