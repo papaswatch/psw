@@ -61,7 +61,7 @@ export function SignInView() {
       <TextField
         fullWidth
         name="email"
-        label="Email address"
+        label="Email"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
         InputLabelProps={{ shrink: true }}
@@ -69,13 +69,13 @@ export function SignInView() {
       />
 
       <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
-        Forgot password?
+        비밀번호를 잊어버리셨나요?
       </Link>
 
       <TextField
         fullWidth
         name="password"
-        label="Password"
+        label="비밀번호"
         value={pwd}
         onChange={(e) => setPwd(e.target.value)}
         InputLabelProps={{ shrink: true }}
@@ -100,7 +100,7 @@ export function SignInView() {
         variant="contained"
         onClick={handleSignIn}
       >
-        Sign in
+        로그인
       </LoadingButton>
     </Box>
   );
@@ -108,11 +108,11 @@ export function SignInView() {
   return (
     <>
       <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
-        <Typography variant="h5">Sign in</Typography>
+        <Typography variant="h5">로그인</Typography>
         <Typography variant="body2" color="text.secondary">
-          Don’t have an account?
+          아직 회원이 아니신가요?
           <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-            Get started
+            가입하기
           </Link>
         </Typography>
       </Box>

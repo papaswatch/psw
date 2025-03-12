@@ -1,5 +1,5 @@
 
-export type KeyValue<T, U> = {
-  key: T;
-  value: U;
+export type KeyValue<K, V> = {
+  key: K;
+  value: V;
 }
