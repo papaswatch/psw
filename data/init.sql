@@ -137,17 +137,16 @@ CREATE TABLE papas.payment
     payment_amount  int NULL
 );
 
-CREATE TABLE papas.user_info
-(
-    user_id       serial NOT NULL,
-    login_id      varchar(50) NULL,
-    password      varchar(100) NULL,
-    name          varchar(100) NULL,
-    email         varchar(100) NULL,
-    phone_number  varchar(20) NULL,
-    created_at    timestamp NULL,
-    edited_at     timestamp NULL,
-    is_alive_user boolean NULL
+CREATE TABLE papas.user_info (
+   user_id	serial	NOT NULL,
+   login_id	varchar(50)	NOT NULL,
+   password	varchar(100) NOT NULL,
+   name varchar(30) NOT NULL,
+   email	varchar(100) NOT NULL,
+   phone_number	varchar(20)	NOT NULL,
+   created_at	timestamp NOT NULL,
+   edited_at	timestamp NOT NULL,
+   is_alive_user	boolean	NOT NULL
 );
 
 CREATE TABLE papas.product_hashtag_mapp
