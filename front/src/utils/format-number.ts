@@ -100,3 +100,39 @@ export function fData(inputValue: InputNumberValue) {
 
   return fm;
 }
+
+
+export const formatPhoneNumber = (value: string) => {
+  // 숫자만 남기기
+  const numericValue = value.replace(/\D/g, "");
+
+  // 길이에 따라 포맷팅 적용
+  if (numericValue.length <= 3) {
+    return numericValue;
+  }
+  if (numericValue.length <= 7) {
+    return `${numericValue.slice(0, 3)}-${numericValue.slice(3)}`;
+  }
+  return `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+};
+
+export const formatPhoneNumberV2 = (value: string) => {
+  // 숫자만 남기기
+  const numericValue = value.replace(/\D/g, "");
+
+  if (numericValue.length <= 3) {
+    return numericValue;
+  }
+  if (numericValue.length <= 6) {
+    return `${numericValue.slice(0, 3)}-${numericValue.slice(3)}`;
+  }
+  if (numericValue.length <= 10) {
+    return `${numericValue.slice(0, 3)}-${numericValue.slice(3, 6)}-${numericValue.slice(6)}`;
+  }
+  return `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+};
+
+// 전화번호 형식 검사 함수
+export const isValidPhoneNumber = (phone: string) => {
+  return /^\d{3}-\d{4}-\d{4}$/.test(phone);
+};

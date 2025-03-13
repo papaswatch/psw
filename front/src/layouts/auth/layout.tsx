@@ -12,6 +12,7 @@ import { Logo } from 'src/components/logo';
 import { Main } from './main';
 import { HeaderSection } from '../core/header-section';
 import { LayoutSection } from '../core/layout-section';
+import Modal from '../../components/modal/modal';
 
 // ----------------------------------------------------------------------
 
@@ -88,6 +89,7 @@ export function AuthLayout({ sx, children, header }: AuthLayoutProps) {
         ...sx,
       }}
     >
+      <Modal />
       <Main layoutQuery={layoutQuery}>{children}</Main>
     </LayoutSection>
   );
