@@ -2,8 +2,8 @@ package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.controller.SignupReq;
-import com.papaswatch.psw.domain.dto.LoginUserInfo;
-import com.papaswatch.psw.domain.entity.UserInfoEntity;
+import com.papaswatch.psw.dto.LoginUserInfo;
+import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

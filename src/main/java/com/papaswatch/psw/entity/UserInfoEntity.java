@@ -1,4 +1,4 @@
-package com.papaswatch.psw.domain.entity;
+package com.papaswatch.psw.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @NoArgsConstructor
-@Table(name = "member_info", schema = "papas")
+@Table(name = "user_info", schema = "papas")
 @Entity
 public class UserInfoEntity {
     @Id
