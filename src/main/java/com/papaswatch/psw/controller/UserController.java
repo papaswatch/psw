@@ -4,6 +4,8 @@ import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.dto.LoginUserInfo;
 import com.papaswatch.psw.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,11 @@ public class UserController {
         return (LoginUserInfo) session.getAttribute(SESSION);
     }
 
+    @PostMapping("/logout")
+    public void logout(HttpSession session) {
+        userService.logout(session);
+    }
+  
     @PostMapping("/signup")
     public Response<Boolean> signup(@RequestBody SignupReq signupReq) {
         return Response.ok(userService.signup(signupReq));

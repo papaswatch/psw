@@ -38,6 +38,7 @@ public class UserService {
             session.setAttribute(SESSION, user);
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(sessionExpired);
+
             return true;
         }
         /* 이외는 아이디 비밀번호 불일치 */
@@ -50,5 +51,11 @@ public class UserService {
         UserInfoEntity user = UserInfoEntity.createBy(signupReq.getUserId(), encodedPwd, signupReq.getName(), signupReq.getEmail(), signupReq.getPhone());
         userRepository.save(user);
         return true;
+    }
+
+    public void logout(HttpSession session) {
+        // 서버에 저장된 세션 무효화
+        session.invalidate();
+        log.info("User :: {} logout", session.getId());
     }
 }
