@@ -14,26 +14,38 @@ public class Response <T> {
     private final String status;
     private T data;
 
-    public static final int CODE_OK_VAL = HttpStatus.OK.value();
-    public static final String CODE_OK_MSG = HttpStatus.OK.name();
-    public static final int CODE_UNAUTHORIZED_VAL = HttpStatus.UNAUTHORIZED.value();
-    public static final String CODE_UNAUTHORIZED_MSG = HttpStatus.UNAUTHORIZED.name();
+    public static final int OK_CODE = HttpStatus.OK.value();
+    public static final String OK_STATUS = HttpStatus.OK.name();
 
-    // 2xx 응답에 대해 data 필드가 포함된 response 를 만들 때 사용한다.
+    public static final int BAD_REQUEST_CODE = HttpStatus.BAD_REQUEST.value();
+    public static final String BAD_REQUEST_STATUS = HttpStatus.BAD_REQUEST.name();
+
+    public static final int UNAUTHORIZED_CODE = HttpStatus.UNAUTHORIZED.value();
+    public static final String UNAUTHORIZED_STATUS = HttpStatus.UNAUTHORIZED.name();
+
     public Response(int code, String status, T data) {
         this(code, status);
         this.data = data;
     }
 
-    public static <T> Response<T> justOk() {
-        return new Response<>(CODE_OK_VAL, CODE_OK_MSG);
+    public static Response<Void> of(int code, String status) {
+        return new Response<>(code, status);
+    }
+
+    public static Response<Void> justOk() {
+        return new Response<>(OK_CODE, OK_STATUS);
     }
 
     public static <T> Response<T> ok(T data) {
-        return new Response<>(CODE_OK_VAL, CODE_OK_MSG, data);
+        return new Response<>(OK_CODE, OK_STATUS, data);
     }
 
-    public static <T> Response<T> unauthorized() {
-        return new Response<>(CODE_UNAUTHORIZED_VAL, CODE_UNAUTHORIZED_MSG);
+    public static Response<Void> badRequest() {
+        return new Response<>(BAD_REQUEST_CODE, BAD_REQUEST_STATUS);
     }
+
+    public static Response<Void> unauthorized() {
+        return new Response<>(UNAUTHORIZED_CODE, UNAUTHORIZED_STATUS);
+    }
+
 }

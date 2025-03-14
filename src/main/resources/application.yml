@@ -23,3 +23,5 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: twave
     password: eva77
+
+user.session.expired: 1800
