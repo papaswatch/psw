@@ -4,8 +4,6 @@ import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.domain.dto.LoginUserInfo;
 import com.papaswatch.psw.domain.entity.UserInfo;
 import com.papaswatch.psw.repository.UserRepository;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,19 +36,16 @@ public class UserService {
 
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(1800);
-            
+
+            log.info("User :: {} login, session :: {}", userId, session.getId());
             return true;
         }
         return false;
     }
 
-    public void logout(HttpSession session, HttpServletResponse response) {
+    public void logout(HttpSession session) {
         // 서버에 저장된 세션 무효화
         session.invalidate();
-
-        Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        log.info("User :: {} logout", session.getId());
     }
 }

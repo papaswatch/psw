@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public void logout(HttpSession session, HttpServletResponse response) {
-        userService.logout(session, response);
+    public void logout(HttpSession session) {
+        userService.logout(session);
     }
 }
