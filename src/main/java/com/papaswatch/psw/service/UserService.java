@@ -1,15 +1,19 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.KeyValue;
-import com.papaswatch.psw.domain.dto.LoginUserInfo;
-import com.papaswatch.psw.domain.entity.UserInfo;
+import com.papaswatch.psw.config.Constant;
+import com.papaswatch.psw.controller.SignupReq;
+import com.papaswatch.psw.dto.LoginUserInfo;
+import com.papaswatch.psw.entity.UserInfoEntity;
+import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.papaswatch.psw.config.Constant.USER.SESSION;
 
@@ -18,29 +22,35 @@ import static com.papaswatch.psw.config.Constant.USER.SESSION;
 @Service("UserService")
 public class UserService {
 
+    @Value("${user.session.expired}")
+    private Integer sessionExpired;
+
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public boolean login(KeyValue<String, String> userInfo, HttpSession session) {
-        String userId = userInfo.getKey();
-        String password = userInfo.getValue();
-
-        // 유저의 아이디와 비밀번호 정보로 유저가 존재하는지 DB에서 확인합니다.
-        Optional<UserInfo> LoginRequestUserInfo = userRepository.findUserInfoByLoginIdAndPassword(userId, password);
-        // 유저의 정보가 존재한다면
-        if (LoginRequestUserInfo.isPresent()) {
-            UserInfo loginRequestUserInfo = LoginRequestUserInfo.get();
+    @Transactional(transactionManager = Constant.DB.TX, readOnly = true)
+    public boolean login(KeyValue<String, String> req, HttpSession session) {
+        UserInfoEntity userEntity = userRepository.findByLoginId(req.getKey()).orElseThrow(ApplicationException::badRequest);
+        if (passwordEncoder.matches(req.getValue(), userEntity.getPassword())) {
             // 세션에 담을 유저 객체를 생성합니다.
-            LoginUserInfo user = LoginUserInfo.of(loginRequestUserInfo.getLoginId(), loginRequestUserInfo.getEmail(), loginRequestUserInfo.getPhoneNumber(), loginRequestUserInfo.getName());
-            
+            LoginUserInfo user = LoginUserInfo.of(userEntity.getLoginId(), userEntity.getEmail(), userEntity.getPhoneNumber(), userEntity.getName());
+            // 세션 설정
             session.setAttribute(SESSION, user);
-
             // 세션 유효 시간 30분으로 설정
-            session.setMaxInactiveInterval(1800);
+            session.setMaxInactiveInterval(sessionExpired);
 
-            log.info("User :: {} login, session :: {}", userId, session.getId());
             return true;
         }
-        return false;
+        /* 이외는 아이디 비밀번호 불일치 */
+        throw ApplicationException.badRequest();
+    }
+
+    @Transactional(transactionManager = Constant.DB.TX)
+    public boolean signup(SignupReq signupReq) {
+        String encodedPwd = passwordEncoder.encode(signupReq.getPwd());
+        UserInfoEntity user = UserInfoEntity.createBy(signupReq.getUserId(), encodedPwd, signupReq.getName(), signupReq.getEmail(), signupReq.getPhone());
+        userRepository.save(user);
+        return true;
     }
 
     public void logout(HttpSession session) {

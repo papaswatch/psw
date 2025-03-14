@@ -1,18 +1,18 @@
-import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
+import type { Breakpoint, SxProps, Theme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import { useTheme } from '@mui/material/styles';
 
-import { _langs, _login, _notifications } from 'src/_mock';
+import { _login, _notifications } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
 import { Main } from './main';
 import { layoutClasses } from '../classes';
-import { NavMobile, NavDesktop } from './nav';
+import { NavDesktop, NavMobile } from './nav';
 import { navData } from '../config-nav-dashboard';
 import { Searchbar } from '../components/searchbar';
 import { _workspaces } from '../config-nav-workspace';
@@ -20,7 +20,6 @@ import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
-import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
 import { LoginButton } from '../components/login-button';
 
@@ -86,7 +85,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                 <Searchbar />
                 {/*  Language 설정 아이콘인데, 인단 주석  */}
                 {/* <LanguagePopover data={_langs} /> */}
-                <LoginButton data={_login}/>
+                <LoginButton data={_login} />
                 {/*  종 부분. (알림)  */}
                 <NotificationsPopover data={_notifications} />
                 <AccountPopover
