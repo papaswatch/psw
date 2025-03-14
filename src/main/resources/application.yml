@@ -1,0 +1,27 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /psw
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        hbm2ddl:
+          auto: none
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_batch_fetch_size: 200
+        jdbc:
+          fetch_size: 100
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+    jdbc-url: jdbc:postgresql://localhost:5432/papaswatch
+    driver-class-name: org.postgresql.Driver
+    username: twave
+    password: eva77
+
+user.session.expired: 1800

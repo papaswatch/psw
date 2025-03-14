@@ -14,6 +14,8 @@ export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
+export const SignUpPage = lazy(() => import('src/pages/sign-up'));
+
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
@@ -59,6 +61,14 @@ export function Router() {
           <SignInPage />
         </AuthLayout>
       ),
+    },
+    {
+      path: 'sign-up',
+      element: (
+        <AuthLayout>
+          <SignUpPage/>
+        </AuthLayout>
+      )
     },
     {
       path: '404',

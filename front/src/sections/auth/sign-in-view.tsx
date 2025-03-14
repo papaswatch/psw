@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -29,6 +30,8 @@ export function SignInView() {
 
   const {mutateAsync: loginMutateAsync} = useLoginMutation()
   const {mutateAsync: meMutateAsync} = useMeMutation();
+  const navigate = useNavigate();
+
 
   const handleSignIn = useCallback(() => {
     if (!userId) {
@@ -60,8 +63,8 @@ export function SignInView() {
     <Box display="flex" flexDirection="column" alignItems="flex-end">
       <TextField
         fullWidth
-        name="email"
-        label="Email"
+        name="id"
+        label="아이디"
         value={userId}
         onChange={(e) => setUserId(e.target.value)}
         InputLabelProps={{ shrink: true }}
@@ -111,7 +114,7 @@ export function SignInView() {
         <Typography variant="h5">로그인</Typography>
         <Typography variant="body2" color="text.secondary">
           아직 회원이 아니신가요?
-          <Link variant="subtitle2" sx={{ ml: 0.5 }}>
+          <Link variant="subtitle2" sx={{ ml: 0.5, cursor: "pointer" }} onClick={() => navigate("/sign-up")}>
             가입하기
           </Link>
         </Typography>
