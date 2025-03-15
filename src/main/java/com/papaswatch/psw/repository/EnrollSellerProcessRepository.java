@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface EnrollSellerProcessRepository extends JpaRepository<EnrollSellerProcess, Long> {
 
     Optional<List<EnrollSellerProcess>> findByStatusIn(List<String> status);
-
 }

@@ -60,4 +60,8 @@ public class EnrollSellerProcess {
         this.reviewedDate = LocalDateTime.now();
         this.rejectReason = rejectReason;
     }
+
+    public static EnrollSellerProcess failedAtValidate(Long userId, boolean bankValidation, boolean businessValidation) {
+        return new EnrollSellerProcess(userId, bankValidation, businessValidation, false, LocalDateTime.now(), null, null, "REJECTED", "DENIED TO GET SELLER POSITION DUE TO FAILED AT VALIDATE");
+    }
 }

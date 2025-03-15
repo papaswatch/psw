@@ -2,7 +2,6 @@ package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.entity.EnrollSellerProcess;
-import com.papaswatch.psw.repository.EnrollSellerProcessRepository;
 import com.papaswatch.psw.service.SellerService;
 import com.papaswatch.psw.service.ValidateService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ public class ValidateController {
 
     @GetMapping("/list")
     public Response<List<EnrollSellerProcess>> getAllRequestedProcess(@RequestParam List<String> statusList) {
+        // PENDING, APPROVED, REJECTED
         return Response.ok(validateService.findByStatusIn(statusList));
     }
 

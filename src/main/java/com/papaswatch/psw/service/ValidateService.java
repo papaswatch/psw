@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -51,24 +52,34 @@ public class ValidateService {
      * 은행정보와 사업자정보 확인이 완료된 후, 판매자 신청 리뷰를 신청합니다.
      * @param sellerValidateReq
      */
+    @Transactional
     public void registerSellerRequest(SellerValidateReq sellerValidateReq) {
         EnrollSellerProcess enrollSellerProcessData = EnrollSellerProcess.create(Long.valueOf(sellerValidateReq.getUserId()), Boolean.TRUE, Boolean.TRUE);
         enrollSellerProcessRepository.save(enrollSellerProcessData);
     }
 
+    @Transactional(readOnly = true)
     public List<EnrollSellerProcess> findByStatusIn(List<String> statusList) {
         return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::noSellerFound);
     }
 
+    @Transactional
     public void approveSeller(Long userId, String reviewer) {
         EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::noSellerFound);
         enrollSellerProcess.approve(reviewer);
         enrollSellerProcessRepository.save(enrollSellerProcess);
     }
 
+    @Transactional
     public void rejectSeller(Long userId, String reviewer,String rejectReason) {
         EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::noSellerFound);
         enrollSellerProcess.reject(reviewer, rejectReason);
         enrollSellerProcessRepository.save(enrollSellerProcess);
+    }
+
+    @Transactional
+    public void failedAtValidate(Long userId, Boolean isBankInfoValid, Boolean isCertificateValid) {
+        EnrollSellerProcess FailedEnrollSellerProcess = EnrollSellerProcess.failedAtValidate(userId, isBankInfoValid, isCertificateValid);
+        enrollSellerProcessRepository.save(FailedEnrollSellerProcess);
     }
 }
