@@ -13,3 +13,10 @@ export type SignupInfo = {
   phone: string;
   email: string;
 }
+
+export type SellerBank = {
+  userId: string;
+  bankName: string;
+  bankAccountNumber: string;
+  bankAccountHolderName: string;
+}

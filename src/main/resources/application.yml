@@ -25,3 +25,7 @@ spring:
     password: eva77
 
 user.session.expired: 1800
+apis:
+  tax:
+    business:
+      key: "d"
