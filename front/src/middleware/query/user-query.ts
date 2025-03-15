@@ -12,12 +12,18 @@ export const useLoginMutation = (): UseMutationResult<void, AxiosError, KeyValue
 
 export const useMeMutation = (): UseMutationResult<LoginUserInfo, AxiosError, void> => {
   return useMutation({
-    mutationFn: () => api.post<LoginUserInfo>(API.USER.ME).then(r => r?.data)
+    mutationFn: () => api.get<LoginUserInfo>(API.USER.ME).then(r => r?.data)
   })
 }
 
 export const useSignupMutation = (): UseMutationResult<boolean|undefined, AxiosError, SignupInfo> => {
   return useMutation({
     mutationFn: (req) => api.post<Response<boolean>>(API.USER.SIGNUP, req).then(r => r?.data?.data)
+  })
+}
+
+export const useLogoutMutation = (): UseMutationResult<void, AxiosError, void> => {
+  return useMutation({
+    mutationFn: () => api.post(API.USER.LOGOUT)
   })
 }

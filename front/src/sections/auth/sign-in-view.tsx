@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -16,6 +16,7 @@ import { Iconify } from 'src/components/iconify';
 import { useLoginMutation, useMeMutation } from '../../middleware/query/user-query';
 import { KeyValue } from '../../types/common-type';
 import { useUserStore } from '../../middleware/store/user-store';
+import { setUserAuth } from '../../hooks/use-user-auth';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ export function SignInView() {
   const navigate = useNavigate();
 
 
-  const handleSignIn = useCallback(() => {
+  const signIn = useCallback(() => {
     if (!userId) {
       alert("사용자 아이디를 입력하세요.")
       return;
@@ -50,14 +51,24 @@ export function SignInView() {
     handleLogin({ key: userId, value: pwd })
       .then(() => {
         /* 요청이 성공이면  */
-        meMutateAsync().then(r => setUser(r))
+        meMutateAsync().then(r => setUserAuth(r))
         router.push('/');
       })
       .catch(() => {
         console.error("failed to login")
       })
 
-  }, [loginMutateAsync, meMutateAsync, pwd, router, setUser, userId]);
+  }, [loginMutateAsync, meMutateAsync, pwd, router, userId]);
+
+  const handleSignInClick = () => {
+    signIn()
+  }
+
+  const handleSignInEnter = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      signIn()
+    }
+  }
 
   const renderForm = (
     <Box display="flex" flexDirection="column" alignItems="flex-end">
@@ -93,6 +104,7 @@ export function SignInView() {
           ),
         }}
         sx={{ mb: 3 }}
+        onKeyDown={handleSignInEnter}
       />
 
       <LoadingButton
@@ -101,7 +113,7 @@ export function SignInView() {
         type="submit"
         color="inherit"
         variant="contained"
-        onClick={handleSignIn}
+        onClick={handleSignInClick}
       >
         로그인
       </LoadingButton>

@@ -14,6 +14,7 @@ export const API = {
   USER: {
     SIGNUP: `${apiUrl}/user/signup`,
     LOGIN: `${apiUrl}/user/login`,
+    LOGOUT: `${apiUrl}/user/logout`,
     ME: `${apiUrl}/user/me`,
   },
 };
