@@ -26,6 +26,7 @@ export const useLogoutMutation = (): UseMutationResult<void, AxiosError, void> =
   return useMutation({
     mutationFn: () => api.post(API.USER.LOGOUT)
   })
+
 }
 
 export const useSellerMutation = (): UseMutationResult<boolean, AxiosError, { bank: SellerBank, certificationFile: File }> => {
