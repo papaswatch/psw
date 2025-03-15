@@ -2,7 +2,7 @@ package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.KeyValue;
 import com.papaswatch.psw.config.Constant;
-import com.papaswatch.psw.controller.SignupReq;
+import com.papaswatch.psw.common.dto.SignupReq;
 import com.papaswatch.psw.dto.LoginUserInfo;
 import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
@@ -38,7 +38,7 @@ public class UserService {
             session.setAttribute(SESSION, user);
             // 세션 유효 시간 30분으로 설정
             session.setMaxInactiveInterval(sessionExpired);
-
+            log.info("Login successful");
             return true;
         }
         /* 이외는 아이디 비밀번호 불일치 */
