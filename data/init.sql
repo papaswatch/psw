@@ -137,16 +137,17 @@ CREATE TABLE papas.payment
     payment_amount  int NULL
 );
 
-CREATE TABLE papas.user_info (
-   user_id	serial	NOT NULL,
-   login_id	varchar(50)	NOT NULL,
-   password	varchar(100) NOT NULL,
-   name varchar(30) NOT NULL,
-   email	varchar(100) NOT NULL,
-   phone_number	varchar(20)	NOT NULL,
-   created_at	timestamp NOT NULL,
-   edited_at	timestamp NOT NULL,
-   is_alive_user	boolean	NOT NULL
+CREATE TABLE papas.user_info
+(
+    user_id       serial       NOT NULL,
+    login_id      varchar(50)  NOT NULL,
+    password      varchar(100) NOT NULL,
+    name          varchar(30)  NOT NULL,
+    email         varchar(100) NOT NULL,
+    phone_number  varchar(20)  NOT NULL,
+    created_at    timestamp    NOT NULL,
+    edited_at     timestamp    NOT NULL,
+    is_alive_user boolean      NOT NULL
 );
 
 CREATE TABLE papas.product_hashtag_mapp
@@ -156,42 +157,75 @@ CREATE TABLE papas.product_hashtag_mapp
     hashtag_key        varchar(100) NOT NULL
 );
 
+CREATE TABLE `enroll_seller_process`
+(
+    user_id             serial      NOT NULL,
+    bank_validation     boolean NULL,
+    business_validation boolean NULL,
+    final_validation    boolean NULL,
+    request_date        timestamp            DEFAULT CURRENT_TIMESTAMP,
+    reviewer_id         varchar(50) NULL,
+    reviewed_date       timestamp null,
+    status              varchar(20) NOT NULL DEFAULT 'PENDING',
+    reject_reason       varchar(255) NULL
+);
+
 ALTER TABLE papas.product_liked
-ADD CONSTRAINT PK_PRODUCT_LIKED PRIMARY KEY (product_liked_id);
+    ADD CONSTRAINT PK_PRODUCT_LIKED PRIMARY KEY (product_liked_id);
 
-ALTER TABLE papas.product_qna_mapp ADD CONSTRAINT PK_PRODUCT_QNA_MAPP PRIMARY KEY (product_qna_mapp_key);
+ALTER TABLE papas.product_qna_mapp
+    ADD CONSTRAINT PK_PRODUCT_QNA_MAPP PRIMARY KEY (product_qna_mapp_key);
 
+ALTER TABLE papas.user_social
+    ADD CONSTRAINT PK_USER_SOCIAL PRIMARY KEY (user_id);
 
-ALTER TABLE papas.user_social ADD CONSTRAINT PK_USER_SOCIAL PRIMARY KEY (user_id);
+ALTER TABLE papas.qna
+    ADD CONSTRAINT PK_QNA PRIMARY KEY (qna_id);
 
-ALTER TABLE papas.qna ADD CONSTRAINT PK_QNA PRIMARY KEY (qna_id);
+ALTER TABLE papas.product_discount
+    ADD CONSTRAINT PK_PRODUCT_DISCOUNT PRIMARY KEY (product_discount_id);
 
-ALTER TABLE papas.product_discount ADD CONSTRAINT PK_PRODUCT_DISCOUNT PRIMARY KEY (product_discount_id);
+ALTER TABLE papas.delivery
+    ADD CONSTRAINT PK_DELIVERY PRIMARY KEY (delivery_id);
 
-ALTER TABLE papas.delivery ADD CONSTRAINT PK_DELIVERY PRIMARY KEY (delivery_id);
+ALTER TABLE papas.product_tag
+    ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_key);
 
-ALTER TABLE papas.product_tag ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_key);
+ALTER TABLE papas.product
+    ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (product_id);
 
-ALTER TABLE papas.product ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (product_id);
+ALTER TABLE papas.user_role
+    ADD CONSTRAINT PK_USER_ROLE PRIMARY KEY (user_id);
 
-ALTER TABLE papas.user_role ADD CONSTRAINT PK_USER_ROLE PRIMARY KEY (user_id);
+ALTER TABLE papas.comments
+    ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (comment_id);
 
-ALTER TABLE papas.comments ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (comment_id);
+ALTER TABLE papas.order
+    ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);
 
-ALTER TABLE papas.order ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);
+ALTER TABLE papas.cart
+    ADD CONSTRAINT PK_CART PRIMARY KEY (card_id);
 
-ALTER TABLE papas.cart ADD CONSTRAINT PK_CART PRIMARY KEY (card_id);
+ALTER TABLE papas.product_image
+    ADD CONSTRAINT PK_PRODUCT_IMAGE PRIMARY KEY (img_id);
 
-ALTER TABLE papas.product_image ADD CONSTRAINT PK_PRODUCT_IMAGE PRIMARY KEY (img_id);
+ALTER TABLE papas.product_order_mapp
+    ADD CONSTRAINT PK_PRODUCT_ORDER_MAPP PRIMARY KEY (product_order_id);
 
-ALTER TABLE papas.product_order_mapp ADD CONSTRAINT PK_PRODUCT_ORDER_MAPP PRIMARY KEY (product_order_id);
+ALTER TABLE papas.payment
+    ADD CONSTRAINT PK_PAYMENT PRIMARY KEY (payment_id);
 
-ALTER TABLE papas.payment ADD CONSTRAINT PK_PAYMENT PRIMARY KEY (payment_id);
+ALTER TABLE papas.user_info
+    ADD CONSTRAINT PK_USER_INFO PRIMARY KEY (user_id);
 
-ALTER TABLE papas.user_info ADD CONSTRAINT PK_USER_INFO PRIMARY KEY (user_id);
+ALTER TABLE papas.product_hashtag_mapp
+    ADD CONSTRAINT PK_PRODUCT_HASHTAG_MAPP PRIMARY KEY (product_hashtag_id);
 
-ALTER TABLE papas.product_hashtag_mapp ADD CONSTRAINT PK_PRODUCT_HASHTAG_MAPP PRIMARY KEY (product_hashtag_id);
+ALTER TABLE papas.user_social
+    ADD CONSTRAINT FK_user_info_TO_user_social_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
 
-ALTER TABLE papas.user_social ADD CONSTRAINT FK_user_info_TO_user_social_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
+ALTER TABLE papas.user_role
+    ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
 
-ALTER TABLE papas.user_role ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
+ALTER TABLE `enroll_seller_process`
+    ADD CONSTRAINT `FK_member_info_TO_enroll_seller_process_1` FOREIGN KEY (`user_id`) REFERENCES `member_info` (`user_id`);
