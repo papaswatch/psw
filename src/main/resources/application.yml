@@ -25,3 +25,10 @@ spring:
     password: eva77
 
 user.session.expired: 1800
+
+apis:
+  # 국세청
+  tax:
+    # 사업자등록정보 조회
+    business:
+      key: 6rQW42fvuau%2F%2BpjtYVf5X9LXgY1oTZaRJ7YLLoiEXbGslJiQC0pQroHH0Pd%2F2tAlY3Nu%2F13mGD60NEnPGw0ywg%3D%3D
