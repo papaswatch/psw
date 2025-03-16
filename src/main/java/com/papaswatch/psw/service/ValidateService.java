@@ -58,6 +58,11 @@ public class ValidateService {
         enrollSellerProcessRepository.save(enrollSellerProcessData);
     }
 
+    /**
+     * 판매자 등록 프로세스의 상태를 매개변수로 해당하는 프로세스 리스트를 불러옵니다.
+     * @param statusList
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<EnrollSellerProcess> findByStatusIn(List<String> statusList) {
         return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::noSellerFound);
