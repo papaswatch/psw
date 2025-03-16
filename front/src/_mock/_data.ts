@@ -25,6 +25,18 @@ export const _login = {
   icon: '/assets/icons/navbar/ic-login.svg'
 }
 
+export const _logout = {
+  value: 'Logout',
+  label: 'Logout',
+  icon: '/assets/icons/navbar/ic-logout.svg'
+}
+
+export const _signup = {
+  value: 'Signup',
+  label: 'Signup',
+  icon: '/assets/icons/navbar/ic-signup.svg'
+}
+
 // ----------------------------------------------------------------------
 
 export const _users = [...Array(24)].map((_, index) => ({

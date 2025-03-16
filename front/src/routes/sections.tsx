@@ -15,6 +15,7 @@ export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const SignUpPage = lazy(() => import('src/pages/sign-up'));
+export const SellerReqPage = lazy(() => import('src/pages/seller-request'));
 
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
@@ -67,6 +68,14 @@ export function Router() {
       element: (
         <AuthLayout>
           <SignUpPage/>
+        </AuthLayout>
+      )
+    },
+    {
+      path: 'seller-req',
+      element: (
+        <AuthLayout>
+          <SellerReqPage/>
         </AuthLayout>
       )
     },

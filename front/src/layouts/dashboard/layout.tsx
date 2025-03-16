@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 
-import { _login, _notifications } from 'src/_mock';
+import { _login, _logout, _notifications, _signup } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -22,6 +22,11 @@ import { HeaderSection } from '../core/header-section';
 import { AccountPopover } from '../components/account-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
 import { LoginButton } from '../components/login-button';
+import { useUserStore } from '../../middleware/store/user-store';
+import { LogoutButton } from '../components/logout-button';
+import { SingupButton } from '../components/signup-button';
+import Modal from '../../components/modal/modal';
+import { useUserAuth } from '../../hooks/use-user-auth';
 
 // ----------------------------------------------------------------------
 
@@ -34,9 +39,14 @@ export type DashboardLayoutProps = {
 };
 
 export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
+
+  useUserAuth();
+
   const theme = useTheme();
 
   const [navOpen, setNavOpen] = useState(false);
+
+  const {user} = useUserStore()
 
   const layoutQuery: Breakpoint = 'lg';
 
@@ -83,30 +93,31 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
               <Box gap={1} display="flex" alignItems="center">
                 {/*  돋보기 부분.(검색)  */}
                 <Searchbar />
+
+                {user ? (
+                  <>
+                    {/* 알림 팝오버 */}
+                    <NotificationsPopover data={_notifications} />
+                    {/* 사용자 기능 모음 팝오버 */}
+                    <AccountPopover
+                      data={[
+                        { label: 'Home', href: '/', icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" /> },
+                        { label: 'Profile', href: '#', icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" /> },
+                        { label: 'Settings', href: '#', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
+                        { label: '판매자신청', href: '/seller-req', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
+                      ]}
+                    />
+                    <LogoutButton data={_logout}/>
+                  </>
+                ) : (
+                  <>
+                    {/* Login 팝오버 */}
+                    <LoginButton data={_login} />
+                    <SingupButton data={_signup} />
+                  </>
+                )}
                 {/*  Language 설정 아이콘인데, 인단 주석  */}
                 {/* <LanguagePopover data={_langs} /> */}
-                <LoginButton data={_login} />
-                {/*  종 부분. (알림)  */}
-                <NotificationsPopover data={_notifications} />
-                <AccountPopover
-                  data={[
-                    {
-                      label: 'Home',
-                      href: '/',
-                      icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
-                    },
-                    {
-                      label: 'Profile',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
-                    },
-                    {
-                      label: 'Settings',
-                      href: '#',
-                      icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
-                    },
-                  ]}
-                />
               </Box>
             ),
           }}
@@ -140,6 +151,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
         ...sx,
       }}
     >
+      <Modal/>
       <Main>{children}</Main>
     </LayoutSection>
   );
