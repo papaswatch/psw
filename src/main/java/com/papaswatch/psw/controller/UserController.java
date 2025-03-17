@@ -28,7 +28,7 @@ public class UserController {
 
     @GetMapping("/me")
     public LoginUserInfo me(HttpSession session) {
-        log.info("me :: {}", (LoginUserInfo) session.getAttribute(SESSION));
+        log.debug("me :: {}", (LoginUserInfo) session.getAttribute(SESSION));
         return (LoginUserInfo) session.getAttribute(SESSION);
     }
 
