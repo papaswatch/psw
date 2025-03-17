@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SellerController {
     private final SellerService sellerService;
 
-    @PostMapping(value = "/validate", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/validation", consumes = {"multipart/form-data"})
     public void validateSellerRequest(@RequestPart("sellerValidateReq") SellerValidateReq sellerValidateReq, @RequestPart("certificationFile") MultipartFile certificationFile) {
         sellerService.validateSellerRequest(sellerValidateReq, certificationFile);
     }
