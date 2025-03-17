@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping("/validate")
+@RequestMapping("/validation")
 public class ValidateController {
     private final SellerService sellerService;
     private final ValidateService validateService;
