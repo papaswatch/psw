@@ -29,7 +29,7 @@ export function SignUpView() {
     email: '',
   });
 
-  const {modal, setModal} = useModalStore()
+  const {setModal} = useModalStore()
 
   const {mutateAsync: signupMutateAsync} = useSignupMutation()
 
