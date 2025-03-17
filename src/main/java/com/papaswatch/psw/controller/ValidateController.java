@@ -13,12 +13,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping("/validate")
+@RequestMapping("/validations")
 public class ValidateController {
     private final SellerService sellerService;
     private final ValidateService validateService;
 
-    @GetMapping("/list")
+    @GetMapping("")
     public Response<List<EnrollSellerProcess>> getAllRequestedProcess(@RequestParam List<String> statusList) {
         // PENDING, APPROVED, REJECTED
         return Response.ok(validateService.findByStatusIn(statusList));
