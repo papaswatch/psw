@@ -146,7 +146,7 @@ CREATE TABLE papas.user_info
     email         varchar(100) NOT NULL,
     phone_number  varchar(20)  NOT NULL,
     created_at    timestamp    NOT NULL,
-    edited_at     timestamp    NOT NULL,
+    edited_at     timestamp,
     is_alive_user boolean      NOT NULL
 );
 
@@ -157,7 +157,7 @@ CREATE TABLE papas.product_hashtag_mapp
     hashtag_key        varchar(100) NOT NULL
 );
 
-CREATE TABLE `enroll_seller_process`
+CREATE TABLE papas.enroll_seller_process
 (
     user_id             serial      NOT NULL,
     bank_validation     boolean NULL,
@@ -227,5 +227,5 @@ ALTER TABLE papas.user_social
 ALTER TABLE papas.user_role
     ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
 
-ALTER TABLE `enroll_seller_process`
+ALTER TABLE papas.enroll_seller_process
     ADD CONSTRAINT `FK_member_info_TO_enroll_seller_process_1` FOREIGN KEY (`user_id`) REFERENCES `member_info` (`user_id`);

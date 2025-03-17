@@ -45,4 +45,12 @@ public class ApplicationException extends RuntimeException {
     public Response<Void> toResponse() {
         return Response.of(httpStatus.value(), this.getMessage());
     }
+
+    public static ApplicationException noSellerFound() {
+        return new ApplicationException("No seller found");
+    }
+
+    public static ApplicationException noUserFound() {
+        return new ApplicationException("No user found");
+    }
 }
