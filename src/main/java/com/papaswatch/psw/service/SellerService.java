@@ -36,13 +36,9 @@ public class SellerService {
         try {
             isBankInfoValid = bankResponse.get();
             isCertificateValid = certificateResponse.get();
-            log.info("isBankInfoValid::{} ", isBankInfoValid);
-            log.info("isCertificateValid::{} ", isCertificateValid);
         } catch (Exception e) {
             log.error("판매자 검증 과정 오류 발생");
         }
-        isCertificateValid = false;
-
         // 검증이 성공
         if (Boolean.TRUE.equals(isBankInfoValid) && Boolean.TRUE.equals(isCertificateValid)) {
             validateService.registerSellerRequest(sellerValidateReq);
