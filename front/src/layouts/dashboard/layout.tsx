@@ -105,6 +105,16 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                         { label: 'Profile', href: '#', icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" /> },
                         { label: 'Settings', href: '#', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
                         { label: '판매자신청', href: '/seller-req', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
+                        { label: '상품등록', href: '/product-reg', icon: <Iconify width={22} icon="solar:document-bold-duotone" /> },
+                        { label: '장바구니', href: '/cart', icon: <Iconify width={22} icon="solar:cart-bold-duotone" /> },
+                        // <Iconify width={22} icon="solar:user-bold-duotone" />  // 사용자 아이콘
+                        // <Iconify width={22} icon="solar:bell-bold-duotone" />  // 알림 아이콘
+                        // <Iconify width={22} icon="solar:chat-round-bold-duotone" />  // 채팅 아이콘
+                        // <Iconify width={22} icon="solar:search-bold-duotone" />  // 검색 아이콘
+                        // <Iconify width={22} icon="solar:document-bold-duotone" />  // 문서 아이콘
+                        // <Iconify width={22} icon="solar:calendar-bold-duotone" />  // 캘린더 아이콘
+                        // <Iconify width={22} icon="solar:cart-bold-duotone" />  // 장바구니 아이콘
+                        // <Iconify width={22} icon="solar:logout-bold-duotone" />  // 로그아웃 아이콘
                       ]}
                     />
                     <LogoutButton data={_logout}/>
