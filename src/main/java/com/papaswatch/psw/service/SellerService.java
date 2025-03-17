@@ -36,17 +36,19 @@ public class SellerService {
         try {
             isBankInfoValid = bankResponse.get();
             isCertificateValid = certificateResponse.get();
-
+            log.info("isBankInfoValid::{} ", isBankInfoValid);
+            log.info("isCertificateValid::{} ", isCertificateValid);
         } catch (Exception e) {
             log.error("판매자 검증 과정 오류 발생");
         }
+        isCertificateValid = false;
 
         // 검증이 성공
         if (Boolean.TRUE.equals(isBankInfoValid) && Boolean.TRUE.equals(isCertificateValid)) {
-            CompletableFuture.runAsync(() -> validateService.registerSellerRequest(sellerValidateReq));
+            validateService.registerSellerRequest(sellerValidateReq);
         } else {
         // 검증 단계에서 하나라도 검증에 실패한다면
-            validateService.failedAtValidate(Long.valueOf(sellerValidateReq.getUserId()), isBankInfoValid, isCertificateValid);
+            validateService.failedAtValidate(sellerValidateReq.getUserId(), isBankInfoValid, isCertificateValid);
         }
     }
 }

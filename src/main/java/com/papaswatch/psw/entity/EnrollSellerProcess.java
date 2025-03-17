@@ -3,6 +3,7 @@ package com.papaswatch.psw.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @ToString
-@Entity(name = "enroll_seller_process")
+@Entity
+@Table(name = "enroll_seller_process", schema = "papas")
 public class EnrollSellerProcess {
     @Id
     @Column(name = "user_id")

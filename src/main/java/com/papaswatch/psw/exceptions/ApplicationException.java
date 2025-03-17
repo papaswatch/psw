@@ -49,4 +49,8 @@ public class ApplicationException extends RuntimeException {
     public static ApplicationException noSellerFound() {
         return new ApplicationException("No seller found");
     }
+
+    public static ApplicationException noUserFound() {
+        return new ApplicationException("No user found");
+    }
 }

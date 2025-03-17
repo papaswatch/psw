@@ -2,8 +2,10 @@ package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.SellerValidateReq;
 import com.papaswatch.psw.entity.EnrollSellerProcess;
+import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.EnrollSellerProcessRepository;
+import com.papaswatch.psw.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -21,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 public class ValidateService {
 
     private final EnrollSellerProcessRepository enrollSellerProcessRepository;
+    private final UserRepository userRepository;
 
     @Value("${apis.tax.business.key}")
     private String businessKey;
@@ -54,7 +58,8 @@ public class ValidateService {
      */
     @Transactional
     public void registerSellerRequest(SellerValidateReq sellerValidateReq) {
-        EnrollSellerProcess enrollSellerProcessData = EnrollSellerProcess.create(Long.valueOf(sellerValidateReq.getUserId()), Boolean.TRUE, Boolean.TRUE);
+        UserInfoEntity userInfo = userRepository.findByLoginId(sellerValidateReq.getUserId()).orElseThrow(ApplicationException::noUserFound);
+        EnrollSellerProcess enrollSellerProcessData = EnrollSellerProcess.create(userInfo.getUserId(), Boolean.TRUE, Boolean.TRUE);
         enrollSellerProcessRepository.save(enrollSellerProcessData);
     }
 
@@ -83,8 +88,9 @@ public class ValidateService {
     }
 
     @Transactional
-    public void failedAtValidate(Long userId, Boolean isBankInfoValid, Boolean isCertificateValid) {
-        EnrollSellerProcess FailedEnrollSellerProcess = EnrollSellerProcess.failedAtValidate(userId, isBankInfoValid, isCertificateValid);
+    public void failedAtValidate(String userId, Boolean isBankInfoValid, Boolean isCertificateValid) {
+        UserInfoEntity userInfo = userRepository.findByLoginId(userId).orElseThrow(ApplicationException::noUserFound);
+        EnrollSellerProcess FailedEnrollSellerProcess = EnrollSellerProcess.failedAtValidate(userInfo.getUserId(), isBankInfoValid, isCertificateValid);
         enrollSellerProcessRepository.save(FailedEnrollSellerProcess);
     }
 }
