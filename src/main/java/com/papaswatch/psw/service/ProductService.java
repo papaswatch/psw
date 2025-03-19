@@ -17,8 +17,12 @@ public class ProductService {
 
     public boolean addCart(long productId, int quantity, HttpSession session) {
         long userId = userService.getUserId(session);
-        cartRepository.save(Cart.create(userId, productId, quantity));
-        return true;
+        try {
+            cartRepository.save(Cart.create(userId, productId, quantity));
+            return true;
+        } catch (Exception e) {
+            log.error("failed to add cart to user {}", userId);
+            return false;
+        }
     }
-
 }
