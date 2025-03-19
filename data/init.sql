@@ -1,5 +1,10 @@
 create schema papas;
 
+CREATE TYPE papas.color_enum AS ENUM (
+    'RED', 'BLUE', 'GREEN', 'YELLOW', 'ORANGE', 'PURPLE', 'PINK',
+    'BLACK', 'WHITE', 'GRAY', 'BROWN', 'CYAN', 'MAGENTA', 'LIME', 'NAVY'
+    );
+
 CREATE TABLE papas.product_liked
 (
     product_liked_id serial NOT NULL,
@@ -71,7 +76,9 @@ CREATE TABLE papas.product
     created_at timestamp NULL,
     updated_at timestamp NULL,
     liked      bigint NULL,
-    price      int NULL
+    price      int NULL,
+    size       double precision NOT NULL,
+    color      color_enum
 );
 
 CREATE TABLE papas.user_role
