@@ -62,7 +62,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public long getUserId(HttpSession session) {
         UserInfoEntity user = (UserInfoEntity) session.getAttribute(SESSION);
-        UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::noUserFound);
+        UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::UserNotFound);
         return userInfoEntity.getUserId();
     }
 }
