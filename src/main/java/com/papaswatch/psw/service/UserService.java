@@ -58,4 +58,11 @@ public class UserService {
         session.invalidate();
         log.info("User :: {} logout", session.getId());
     }
+
+    @Transactional(readOnly = true)
+    public long getUserId(HttpSession session) {
+        UserInfoEntity user = (UserInfoEntity) session.getAttribute(SESSION);
+        UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::noUserFound);
+        return userInfoEntity.getUserId();
+    }
 }

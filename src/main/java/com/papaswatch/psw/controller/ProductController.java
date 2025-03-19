@@ -1,5 +1,8 @@
 package com.papaswatch.psw.controller;
 
+import com.papaswatch.psw.common.dto.Response;
+import com.papaswatch.psw.service.ProductService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +12,30 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
+    private final ProductService productService;
 
     @PostMapping("/add")
-    public void addProduct() {}
+    public void addProduct() {
+    }
 
     @PutMapping("/edit")
-    public void editProduct() {}
+    public void editProduct() {
+    }
 
     @DeleteMapping("/delete")
-    public void deleteProduct() {}
+    public void deleteProduct() {
+    }
+
+    /**
+     * 특정 물품 단건을 장바구니에 담습니다.
+     * @param productId
+     * @param quantity
+     * @param session
+     * @return
+     */
+    @PostMapping("/card/add/{productId}")
+    public Response<Boolean> addCard(@PathVariable long productId, @RequestParam int quantity, HttpSession session) {
+        boolean response = productService.addCart(productId, quantity, session);
+        return Response.ok(response);
+    }
 }
