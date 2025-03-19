@@ -28,5 +28,5 @@ public class HashtagEntity {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "hashtag")
-    private List<HashtagEntity> hashtags;
+    private List<ProductHashtagMappEntity> hashtags;
 }
