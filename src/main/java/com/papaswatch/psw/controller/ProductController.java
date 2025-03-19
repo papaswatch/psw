@@ -44,4 +44,16 @@ public class ProductController {
         boolean response = productService.removeCart(cartId, session);
         return Response.ok(response);
     }
+
+    @PostMapping("/liked/add/{productId}")
+    public Response<Boolean> addProductLiked(@PathVariable long productId, HttpSession session) {
+        boolean response = productService.addProductLiked(productId, session);
+        return Response.ok(response);
+    }
+
+    @DeleteMapping("/liked/delete/{productId}")
+    public Response<Boolean> deleteProductLiked(@PathVariable long productId, HttpSession session) {
+        boolean response = productService.deleteProductLiked(productId, session);
+        return Response.ok(response);
+    }
 }

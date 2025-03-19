@@ -57,4 +57,10 @@ public class ApplicationException extends RuntimeException {
     public static ApplicationException CartDataNotFound() {
         return new ApplicationException("Cart data not found");
     }
+
+    public static ApplicationException ProductLikedNotFound() {
+        return new ApplicationException("Product liked not found");
+    }
+
+
 }
