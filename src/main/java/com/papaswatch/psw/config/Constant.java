@@ -14,6 +14,8 @@ public abstract class Constant {
         public static final String DS = "dataSource";
         public static final String EM = "entityManagerFactory";
         public static final String TX = "transactionManager";
+
+        public static final String PAPAS_SCHEMA = "papas";
     }
 
     public abstract static class USER {

@@ -1,5 +1,6 @@
 package com.papaswatch.psw.dto.product;
 
+import com.papaswatch.psw.entity.product.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -31,6 +31,7 @@ export default function ProductRegisterView() {
     price: "",
     stock: "",
     description: "",
+    images: "",
   })
 
   // 모든 필드가 유효한 경우 버튼 활성화
@@ -50,15 +51,15 @@ export default function ProductRegisterView() {
       }
 
       if (field === 'price') {
-        newErrors.price = price.length ? '가격을 입력해주세요.' : '';
+        newErrors.price = price.length < 1 ? '가격을 입력해주세요.' : '';
       }
 
       if (field === 'stock') {
-        newErrors.stock = stock.length ? '수량을 입력해주세요.' : '';
+        newErrors.stock = stock.length < 1 ? '수량을 입력해주세요.' : '';
       }
 
       if (field === 'description') {
-        newErrors.description = description.length ? '설명을 입력해주세요.' : '';
+        newErrors.description = description.length < 1 ? '설명을 입력해주세요.' : '';
       }
 
       return newErrors;
@@ -80,6 +81,10 @@ export default function ProductRegisterView() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target?.files?.length) {
       setImages(e.target.files);
+      setErrors(prev => ({ ...prev, images: "" }))
+    } else {
+      setImages(null)
+      setErrors(prev => ({...prev, images: "에러!"}))
     }
   };
 
@@ -120,6 +125,9 @@ export default function ProductRegisterView() {
           .then(r => console.log("success! r", r));
     }
   };
+
+  console.log("isFormValid:", isFormValid)
+  console.log("errors:", errors)
 
   return (
     <Card sx={{ maxWidth: 500, margin: "auto", mt: 5, p: 3 }}>
@@ -206,6 +214,7 @@ export default function ProductRegisterView() {
                 accept="image/*"
                 type="file"
                 multiple
+                name="images"
                 onChange={handleImageChange}
                 style={{ display: "none" }}
                 id="image-upload"

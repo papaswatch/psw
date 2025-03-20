@@ -7,10 +7,12 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+import static com.papaswatch.psw.config.Constant.DB.PAPAS_SCHEMA;
+
 @ToString
 @Getter
 @NoArgsConstructor
-@Table(name = "user_info", schema = "papas")
+@Table(name = "user_info", schema = PAPAS_SCHEMA)
 @Entity
 public class UserInfoEntity {
     @Id

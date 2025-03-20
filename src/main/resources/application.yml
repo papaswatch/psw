@@ -16,10 +16,11 @@ spring:
         hbm2ddl:
           auto: none
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
         default_batch_fetch_size: 200
         jdbc:
           fetch_size: 100
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     hikari:
       maximum-pool-size: 10
@@ -32,7 +33,7 @@ user.session.expired: 1800
 
 images:
   product:
-    dir: ${PRODUCT_DIR:./src/main/resources/products}
+    dir: ${PRODUCT_DIR:C:\workspace\papaswatch\psw\src\main\resources\products}
 
 apis:
   # 국세청

@@ -5,14 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import static com.papaswatch.psw.config.Constant.DB.PAPAS_SCHEMA;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_hashtag")
+@EntityListeners(AuditingEntityListener.class)
+@Table(name = "product_tag", uniqueConstraints = @UniqueConstraint(columnNames = "name"), schema = PAPAS_SCHEMA)
 @Entity
 public class HashtagEntity {
     @Id
@@ -20,13 +23,18 @@ public class HashtagEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long hashtagId;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     private String name;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "hashtag")
-    private List<ProductHashtagMappEntity> hashtags;
+    private HashtagEntity(String name) {
+        this.name = name;
+    }
+
+    public static HashtagEntity of(String name) {
+        return new HashtagEntity(name);
+    }
 }
