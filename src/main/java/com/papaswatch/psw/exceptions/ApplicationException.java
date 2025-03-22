@@ -46,11 +46,21 @@ public class ApplicationException extends RuntimeException {
         return Response.of(httpStatus.value(), this.getMessage());
     }
 
-    public static ApplicationException noSellerFound() {
-        return new ApplicationException("No seller found");
+    public static ApplicationException SellerNotFound() {
+        return new ApplicationException("Seller not found");
     }
 
-    public static ApplicationException noUserFound() {
-        return new ApplicationException("No user found");
+    public static ApplicationException UserNotFound() {
+        return new ApplicationException("User not found");
     }
+
+    public static ApplicationException CartDataNotFound() {
+        return new ApplicationException("Cart data not found");
+    }
+
+    public static ApplicationException ProductLikedNotFound() {
+        return new ApplicationException("Product liked not found");
+    }
+
+
 }

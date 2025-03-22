@@ -66,7 +66,7 @@ CREATE TABLE papas.product
     contents   varchar(4000) NULL,
     brand      varchar(100) NULL,
     stock      bigint NULL,
-    user_id    varchar(50) NOT NULL,
+    user_id    int NOT NULL,
     created_at timestamp NULL,
     updated_at timestamp NULL,
     liked      bigint NULL,
@@ -104,7 +104,7 @@ CREATE TABLE papas.order
 
 CREATE TABLE papas.cart
 (
-    card_id       serial NOT NULL,
+    cart_id       serial NOT NULL,
     user_id       serial NOT NULL,
     product_id    serial NOT NULL,
     product_count int NULL
@@ -205,7 +205,7 @@ ALTER TABLE papas.order
     ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);
 
 ALTER TABLE papas.cart
-    ADD CONSTRAINT PK_CART PRIMARY KEY (card_id);
+    ADD CONSTRAINT PK_CART PRIMARY KEY (cart_id);
 
 ALTER TABLE papas.product_image
     ADD CONSTRAINT PK_PRODUCT_IMAGE PRIMARY KEY (img_id);
@@ -229,4 +229,4 @@ ALTER TABLE papas.user_role
     ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
 
 ALTER TABLE papas.enroll_seller_process
-    ADD CONSTRAINT FK_member_info_TO_enroll_seller_process_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
+    ADD CONSTRAINT FK_user_info_TO_enroll_seller_process FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);

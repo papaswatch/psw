@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -58,7 +57,7 @@ public class ValidateService {
      */
     @Transactional
     public void registerSellerRequest(SellerValidateReq sellerValidateReq) {
-        UserInfoEntity userInfo = userRepository.findByLoginId(sellerValidateReq.getUserId()).orElseThrow(ApplicationException::noUserFound);
+        UserInfoEntity userInfo = userRepository.findByLoginId(sellerValidateReq.getUserId()).orElseThrow(ApplicationException::UserNotFound);
         EnrollSellerProcess enrollSellerProcessData = EnrollSellerProcess.create(userInfo.getUserId(), Boolean.TRUE, Boolean.TRUE);
         enrollSellerProcessRepository.save(enrollSellerProcessData);
     }
@@ -70,26 +69,26 @@ public class ValidateService {
      */
     @Transactional(readOnly = true)
     public List<EnrollSellerProcess> findByStatusIn(List<String> statusList) {
-        return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::noSellerFound);
+        return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::SellerNotFound);
     }
 
     @Transactional
     public void approveSeller(Long userId, String reviewer) {
-        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::noSellerFound);
+        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
         enrollSellerProcess.approve(reviewer);
         enrollSellerProcessRepository.save(enrollSellerProcess);
     }
 
     @Transactional
     public void rejectSeller(Long userId, String reviewer,String rejectReason) {
-        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::noSellerFound);
+        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
         enrollSellerProcess.reject(reviewer, rejectReason);
         enrollSellerProcessRepository.save(enrollSellerProcess);
     }
 
     @Transactional
     public void failedAtValidate(String userId, Boolean isBankInfoValid, Boolean isCertificateValid) {
-        UserInfoEntity userInfo = userRepository.findByLoginId(userId).orElseThrow(ApplicationException::noUserFound);
+        UserInfoEntity userInfo = userRepository.findByLoginId(userId).orElseThrow(ApplicationException::UserNotFound);
         EnrollSellerProcess FailedEnrollSellerProcess = EnrollSellerProcess.failedAtValidate(userInfo.getUserId(), isBankInfoValid, isCertificateValid);
         enrollSellerProcessRepository.save(FailedEnrollSellerProcess);
     }
