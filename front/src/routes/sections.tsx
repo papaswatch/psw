@@ -18,6 +18,8 @@ export const SignUpPage = lazy(() => import('src/pages/sign-up'));
 export const SellerReqPage = lazy(() => import('src/pages/seller-request'));
 
 export const ProductsPage = lazy(() => import('src/pages/products'));
+export const ProductRegisterPage = lazy(() => import('src/pages/product-register'));
+
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -53,32 +55,57 @@ export function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+        // { path: 'sign-in', element: <SignInPage /> },
+        // { path: 'sign-up', element: <SignUpPage /> },
+        { path: 'seller-req', element: <SellerReqPage /> },
+        { path: 'product-reg', element: <ProductRegisterPage/> },
       ],
     },
     {
-      path: 'sign-in',
       element: (
         <AuthLayout>
-          <SignInPage />
+          <Suspense fallback={renderFallback}>
+            <Outlet />
+          </Suspense>
         </AuthLayout>
       ),
+      children: [
+        { path: 'sign-in', element: <SignInPage /> },
+        { path: 'sign-up', element: <SignUpPage /> },
+      ]
     },
-    {
-      path: 'sign-up',
-      element: (
-        <AuthLayout>
-          <SignUpPage/>
-        </AuthLayout>
-      )
-    },
-    {
-      path: 'seller-req',
-      element: (
-        <AuthLayout>
-          <SellerReqPage/>
-        </AuthLayout>
-      )
-    },
+    // {
+    //   path: 'sign-in',
+    //   element: (
+    //     <AuthLayout>
+    //       <SignInPage />
+    //     </AuthLayout>
+    //   ),
+    // },
+    // {
+    //   path: 'sign-up',
+    //   element: (
+    //     <AuthLayout>
+    //       <SignUpPage/>
+    //     </AuthLayout>
+    //   )
+    // },
+    // {
+    //   path: 'seller-req',
+    //   element: (
+    //     <AuthLayout>
+    //       <SellerReqPage/>
+    //     </AuthLayout>
+    //   )
+    // },
+    // {
+    //   path: 'product-reg',
+    //   element: (
+    //     <AuthLayout>
+    //       <ProductRegisterPage/>
+    //     </AuthLayout>
+    //   )
+    // },
     {
       path: '404',
       element: <Page404 />,

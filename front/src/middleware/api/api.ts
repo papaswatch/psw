@@ -18,6 +18,7 @@ export const API = {
     ME: `${apiUrl}/user/me`,
     SELLER: `${apiUrl}/seller/validate`,
   },
+  PRODUCT: `${apiUrl}/products`
 };
 
 export default api;
