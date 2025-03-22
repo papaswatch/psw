@@ -1,6 +1,5 @@
 package com.papaswatch.psw.service.product;
 
-import com.papaswatch.psw.common.utils.DateTimeUtils;
 import com.papaswatch.psw.config.Constant;
 import com.papaswatch.psw.dto.product.ProductInfo;
 import com.papaswatch.psw.entity.UserInfoEntity;
@@ -34,7 +33,7 @@ import java.util.UUID;
 public class ProductService {
 
     @Value("${images.product.dir}")
-    private String productDir;
+    private String productImgDir;
 
     private final UserService userService;
 
@@ -44,7 +43,7 @@ public class ProductService {
     private final ProductImageJpaRepository productImageRepository;
 
     @Transactional(transactionManager = Constant.DB.TX)
-    public boolean createProduct(String loginId, ProductInfo productInfo, List<MultipartFile> imageFiles) {
+    public boolean addProduct(String loginId, ProductInfo productInfo, List<MultipartFile> imageFiles) {
         log.debug("productInfo: {}", productInfo);
         /* 사용자 검증. */
         UserInfoEntity userInfo = userService.getUserInfo(loginId);
@@ -108,7 +107,7 @@ public class ProductService {
 
 //        String datetime = DateTimeUtils.currentYearToDateSlash();
 //        String directoryPath = String.format("%s\\%s\\%s\\%s", productDir, dir1, dir2, datetime);
-        String directoryPath = productDir + File.separator + dir1 + File.separator + dir2;
+        String directoryPath = productImgDir + File.separator + dir1 + File.separator + dir2;
         // 디렉토리 존재 확인 및 생성
         try {
             Files.createDirectories(Paths.get(directoryPath));

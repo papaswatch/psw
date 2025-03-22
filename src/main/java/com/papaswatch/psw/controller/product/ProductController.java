@@ -28,7 +28,7 @@ public class ProductController {
     @PostMapping
     public Response<Boolean> addProduct(HttpSession httpSession, @RequestPart("productInfo") ProductInfo productInfo, @RequestPart("images") List<MultipartFile> imageFiles) {
         LoginUserInfo user = (LoginUserInfo) httpSession.getAttribute(SESSION); // TODO: ArgumentResolver 로 처리할거임
-        return Response.ok(productService.createProduct(user.getLoginId(), productInfo, imageFiles));
+        return Response.ok(productService.addProduct(user.getLoginId(), productInfo, imageFiles));
     }
 
     @PutMapping("/edit")
