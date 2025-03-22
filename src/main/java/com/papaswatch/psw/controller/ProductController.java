@@ -24,25 +24,25 @@ public class ProductController {
      * @param session
      * @return
      */
-    @PostMapping("/cart/add/{productId}")
+    @PostMapping("/cart/{productId}")
     public Response<Boolean> addCart(@PathVariable long productId, @RequestParam int quantity, HttpSession session) {
         boolean response = productService.addCart(productId, quantity, session);
         return Response.ok(response);
     }
 
-    @DeleteMapping("/cart/delete/{cartId}")
+    @DeleteMapping("/cart/{cartId}")
     public Response<Boolean> deleteCart(@PathVariable long cartId, HttpSession session) {
         boolean response = productService.removeCart(cartId, session);
         return Response.ok(response);
     }
 
-    @PostMapping("/liked/add/{productId}")
+    @PostMapping("/liked/{productId}")
     public Response<Boolean> addProductLiked(@PathVariable long productId, HttpSession session) {
         boolean response = productService.addProductLiked(productId, session);
         return Response.ok(response);
     }
 
-    @DeleteMapping("/liked/delete/{productId}")
+    @DeleteMapping("/liked/{productId}")
     public Response<Boolean> deleteProductLiked(@PathVariable long productId, HttpSession session) {
         boolean response = productService.deleteProductLiked(productId, session);
         return Response.ok(response);
