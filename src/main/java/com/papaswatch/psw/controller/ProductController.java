@@ -8,23 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 @RequiredArgsConstructor
 @Slf4j
 public class ProductController {
     private final ProductService productService;
-
-    @PostMapping("/add")
-    public void addProduct() {
-    }
-
-    @PutMapping("/edit")
-    public void editProduct() {
-    }
-
-    @DeleteMapping("/delete")
-    public void deleteProduct() {
-    }
 
     /**
      * 특정 물품 단건을 장바구니에 담습니다.
@@ -34,13 +22,13 @@ public class ProductController {
      * @return
      */
     @PostMapping("/cart/add/{productId}")
-    public Response<Boolean> addCard(@PathVariable long productId, @RequestParam int quantity, HttpSession session) {
+    public Response<Boolean> addCart(@PathVariable long productId, @RequestParam int quantity, HttpSession session) {
         boolean response = productService.addCart(productId, quantity, session);
         return Response.ok(response);
     }
 
     @DeleteMapping("/cart/delete/{cartId}")
-    public Response<Boolean> deleteCard(@PathVariable long cartId, HttpSession session) {
+    public Response<Boolean> deleteCart(@PathVariable long cartId, HttpSession session) {
         boolean response = productService.removeCart(cartId, session);
         return Response.ok(response);
     }

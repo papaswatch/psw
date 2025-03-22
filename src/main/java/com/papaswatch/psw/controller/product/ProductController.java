@@ -31,9 +31,9 @@ public class ProductController {
         return Response.ok(productService.addProduct(user.getLoginId(), productInfo, imageFiles));
     }
 
-    @PutMapping("/edit")
+    @PutMapping
     public void editProduct() {}
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public void deleteProduct() {}
 }
