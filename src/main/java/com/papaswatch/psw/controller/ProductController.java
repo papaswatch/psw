@@ -1,11 +1,14 @@
 package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.Response;
+import com.papaswatch.psw.dto.ProductRecentViewed;
 import com.papaswatch.psw.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -42,6 +45,12 @@ public class ProductController {
     @DeleteMapping("/liked/delete/{productId}")
     public Response<Boolean> deleteProductLiked(@PathVariable long productId, HttpSession session) {
         boolean response = productService.deleteProductLiked(productId, session);
+        return Response.ok(response);
+    }
+
+    @PostMapping("/recent/{productId}")
+    public Response<List<ProductRecentViewed>> addRecentViewedProduct(@PathVariable long productId, HttpSession session) {
+        List<ProductRecentViewed> response = productService.addRecentViewedProduct(productId, session);
         return Response.ok(response);
     }
 }
