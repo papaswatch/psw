@@ -59,7 +59,7 @@ CREATE TABLE papas.product_tag
     created_at timestamp null
 );
 
-CREATE TABLE papas.product
+CREATE TABLE papas.productEntity
 (
     product_id serial      NOT NULL,
     name       varchar(100) NULL,
@@ -192,7 +192,7 @@ ALTER TABLE papas.delivery
 ALTER TABLE papas.product_tag
     ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_id);
 
-ALTER TABLE papas.product
+ALTER TABLE papas.productEntity
     ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (product_id);
 
 ALTER TABLE papas.user_role

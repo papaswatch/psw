@@ -62,5 +62,7 @@ public class ApplicationException extends RuntimeException {
         return new ApplicationException("Product liked not found");
     }
 
-
+    public static ApplicationException ProductNotFound() {
+        return new ApplicationException("Product not found");
+    }
 }
