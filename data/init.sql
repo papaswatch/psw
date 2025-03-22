@@ -54,10 +54,9 @@ CREATE TABLE papas.delivery
 
 CREATE TABLE papas.product_tag
 (
-    hashtag_key varchar(100) NOT NULL,
-    vintage     varchar(10) NULL,
-    classic     varchar(10) NULL,
-    hiphop      varchar(10) NULL
+    hashtag_id serial NOT NULL,
+    name     varchar(10) UNIQUE NOT NULL,
+    created_at timestamp null
 );
 
 CREATE TABLE papas.product
@@ -114,8 +113,10 @@ CREATE TABLE papas.cart
 CREATE TABLE papas.product_image
 (
     img_id     serial NOT NULL,
-    name       varchar(100) NULL,
-    file_path  varchar(200) NULL,
+    origin_name varchar(100) NOT NULL,
+    hash_name varchar(100) NOT NULL,
+    file_path  varchar(200) NOT NULL,
+    extension varchar(100) NOT NULL,
     product_id serial NOT NULL
 );
 
@@ -153,8 +154,8 @@ CREATE TABLE papas.user_info
 CREATE TABLE papas.product_hashtag_mapp
 (
     product_hashtag_id serial       NOT NULL,
-    product_id         serial       NOT NULL,
-    hashtag_key        varchar(100) NOT NULL
+    product_id         integer       NOT NULL,
+    hashtag_id        integer NOT NULL
 );
 
 CREATE TABLE papas.enroll_seller_process
@@ -189,7 +190,7 @@ ALTER TABLE papas.delivery
     ADD CONSTRAINT PK_DELIVERY PRIMARY KEY (delivery_id);
 
 ALTER TABLE papas.product_tag
-    ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_key);
+    ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_id);
 
 ALTER TABLE papas.product
     ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (product_id);
@@ -228,4 +229,4 @@ ALTER TABLE papas.user_role
     ADD CONSTRAINT FK_user_info_TO_user_role_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);
 
 ALTER TABLE papas.enroll_seller_process
-    ADD CONSTRAINT `FK_member_info_TO_enroll_seller_process_1` FOREIGN KEY (`user_id`) REFERENCES `member_info` (`user_id`);
+    ADD CONSTRAINT FK_member_info_TO_enroll_seller_process_1 FOREIGN KEY (user_id) REFERENCES papas.user_info (user_id);

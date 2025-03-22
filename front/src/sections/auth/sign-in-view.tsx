@@ -51,14 +51,14 @@ export function SignInView() {
     handleLogin({ key: userId, value: pwd })
       .then(() => {
         /* 요청이 성공이면  */
-        meMutateAsync().then(r => setUserAuth(r))
-        router.push('/');
+        meMutateAsync().then(r => setUserAuth(r));
+        navigate('/')
       })
       .catch(() => {
         console.error("failed to login")
       })
 
-  }, [loginMutateAsync, meMutateAsync, pwd, router, userId]);
+  }, [loginMutateAsync, meMutateAsync, pwd, navigate, userId]);
 
   const handleSignInClick = () => {
     signIn()
@@ -71,7 +71,7 @@ export function SignInView() {
   }
 
   const renderForm = (
-    <Box display="flex" flexDirection="column" alignItems="flex-end">
+    <Box display="flex" flexDirection="column" width="100%" alignItems="flex-end" maxWidth="400px">
       <TextField
         fullWidth
         name="id"
@@ -121,8 +121,8 @@ export function SignInView() {
   );
 
   return (
-    <>
-      <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
+    <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
+      <Box display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
         <Typography variant="h5">로그인</Typography>
         <Typography variant="body2" color="text.secondary">
           아직 회원이 아니신가요?
@@ -154,6 +154,6 @@ export function SignInView() {
           <Iconify icon="ri:twitter-x-fill" />
         </IconButton>
       </Box>
-    </>
+    </Box>
   );
 }

@@ -25,7 +25,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ data, sx, ...other})
 
   const handleInit = () => {
     removeUserAuth()
-    window.location.reload();
+    navigate(0)
   }
 
   const handleLogout = () => {
@@ -33,7 +33,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({ data, sx, ...other})
       isOpen: true,
       header: '알림',
       content: '로그아웃 하시겠습니까?',
-      callback: () => logoutMutateAsync().then(() => handleInit())
+      callback: async () => logoutMutateAsync().then(() => handleInit())
     })
   }
 

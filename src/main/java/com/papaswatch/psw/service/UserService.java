@@ -53,6 +53,11 @@ public class UserService {
         return true;
     }
 
+    @Transactional(transactionManager = Constant.DB.TX, readOnly = true)
+    public UserInfoEntity getUserInfo(String id) {
+        return userRepository.findByLoginId(id).orElseThrow(ApplicationException::badRequest);
+    }
+
     public void logout(HttpSession session) {
         // 서버에 저장된 세션 무효화
         session.invalidate();
