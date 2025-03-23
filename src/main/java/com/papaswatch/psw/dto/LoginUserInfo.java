@@ -1,4 +1,4 @@
-package com.papaswatch.psw.dto;
+package com.papaswatch.psw.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

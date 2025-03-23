@@ -1,6 +1,5 @@
 package com.papaswatch.psw.service;
 
-import com.papaswatch.psw.dto.ProductRecentViewed;
 import com.papaswatch.psw.entity.CartEntity;
 import com.papaswatch.psw.entity.ProductLikedEntity;
 import com.papaswatch.psw.entity.product.ProductEntity;
@@ -128,11 +127,11 @@ public class ProductService {
      * @return
      */
     @Transactional
-    public List<ProductRecentViewed> addRecentViewedProduct(long productId, HttpSession session) {
+    public List<Long> addRecentViewedProduct(long productId, HttpSession session) {
         long loginUserId = userService.getUserId(session);
 
         // 현재 접속중인 유저의 id의 Queue 정보를 가져옵니다. 없으면 새로운 Queue를 넣어줍니다.
-        Queue<ProductRecentViewed> userQueue = recentViewedRepository.getRecentViewedProductQueue(loginUserId);
+        Queue<Long> userQueue = recentViewedRepository.getRecentViewedProductQueue(loginUserId);
         if (userQueue == null) {
             userQueue = new ArrayDeque<>();
         }
@@ -144,9 +143,7 @@ public class ProductService {
         }
 
         // 추가 될 최근 본 상품에 대한 정보를 생성합니다.
-        ProductRecentViewed recentViewedProduct = createRecentViewedProduct(productId);
-        userQueue.offer(recentViewedProduct);
-
+        userQueue.offer(productId);
         recentViewedRepository.saveRecentViewedProduct(loginUserId, userQueue);
 
         return createRecentViewedProductResponse(userQueue);
@@ -157,31 +154,11 @@ public class ProductService {
      * @param recentViewedQueue
      * @return
      */
-    public List<ProductRecentViewed> createRecentViewedProductResponse(Queue<ProductRecentViewed> recentViewedQueue) {
-        List<ProductRecentViewed> response = new ArrayList<>(recentViewedQueue);
+    public List<Long> createRecentViewedProductResponse(Queue<Long> recentViewedQueue) {
+        List<Long> response = new ArrayList<>(recentViewedQueue);
         Collections.reverse(response);
         log.debug("check recent viewed response :: {}", response.toString());
         return response;
-    }
-
-    /**
-     * 최근 본 상품 객체를 생성하여 response합니다.
-     * @param productId
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public ProductRecentViewed createRecentViewedProduct(long productId) {
-        // 최근 본 상품에 추가할 상품의 정보를 가져옵니다.
-        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(ApplicationException::productNotFound);
-        
-        String productName = productEntity.getName();
-
-        // 첫번째 이미지 정보를 가져옵니다.(대표이미지) TODO NOTE 대표이미지에 대한 설정이 필요하지 않은가?(PSW-0000-143)
-        ProductImageEntity representativeImage = productEntity.getProductImages().getFirst();
-        Long productRepresentativeImage = representativeImage.getImgId();
-        String filePath = representativeImage.getFilePath();
-
-        return ProductRecentViewed.of(productId, productName, productRepresentativeImage, filePath);
     }
 
 }

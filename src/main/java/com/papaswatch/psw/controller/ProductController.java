@@ -1,7 +1,6 @@
 package com.papaswatch.psw.controller;
 
 import com.papaswatch.psw.common.dto.Response;
-import com.papaswatch.psw.dto.ProductRecentViewed;
 import com.papaswatch.psw.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +48,8 @@ public class ProductController {
     }
 
     @PostMapping("/recent/{productId}")
-    public Response<List<ProductRecentViewed>> addRecentViewedProduct(@PathVariable long productId, HttpSession session) {
-        List<ProductRecentViewed> response = productService.addRecentViewedProduct(productId, session);
+    public Response<List<Long>> addRecentViewedProduct(@PathVariable long productId, HttpSession session) {
+        List<Long> response = productService.addRecentViewedProduct(productId, session);
         return Response.ok(response);
     }
 }
