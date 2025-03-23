@@ -1,6 +1,7 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.SellerValidateReq;
+import com.papaswatch.psw.dto.EnrollSellerProcessDto;
 import com.papaswatch.psw.entity.EnrollSellerProcessEntity;
 import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
@@ -68,8 +69,9 @@ public class ValidateService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<EnrollSellerProcessEntity> findByStatusIn(List<String> statusList) {
-        return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::sellerNotFound);
+    public List<EnrollSellerProcessDto> findByStatusIn(List<String> statusList) {
+        List<EnrollSellerProcessEntity> enrollSellerProcessEntities = enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::sellerNotFound);
+        return EnrollSellerProcessDto.response(enrollSellerProcessEntities);
     }
 
     @Transactional
