@@ -11,13 +11,13 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: false
-        show_sql: false
+        format_sql: true
+        show_sql: true
         hbm2ddl:
           auto: none
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
-        default_batch_fetch_size: 200
+        default_batch_fetch_size: 100
         jdbc:
           fetch_size: 100
         dialect: org.hibernate.dialect.PostgreSQLDialect

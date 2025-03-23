@@ -14,7 +14,6 @@ import static com.papaswatch.psw.config.Constant.DB.PAPAS_SCHEMA;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Table(name = "product_tag", uniqueConstraints = @UniqueConstraint(columnNames = "name"), schema = PAPAS_SCHEMA)
 @Entity
 public class HashtagEntity {
@@ -26,12 +25,12 @@ public class HashtagEntity {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     private HashtagEntity(String name) {
         this.name = name;
+        this.createdAt = LocalDateTime.now();
     }
 
     public static HashtagEntity of(String name) {
