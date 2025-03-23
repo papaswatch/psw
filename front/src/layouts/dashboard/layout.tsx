@@ -113,7 +113,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                         // <Iconify width={22} icon="solar:search-bold-duotone" />  // 검색 아이콘
                         // <Iconify width={22} icon="solar:document-bold-duotone" />  // 문서 아이콘
                         // <Iconify width={22} icon="solar:calendar-bold-duotone" />  // 캘린더 아이콘
-                        // <Iconify width={22} icon="solar:cart-bold-duotone" />  // 장바구니 아이콘
+                        // <Iconify width={22} icon="solar:cartEntity-bold-duotone" />  // 장바구니 아이콘
                         // <Iconify width={22} icon="solar:logout-bold-duotone" />  // 로그아웃 아이콘
                       ]}
                     />

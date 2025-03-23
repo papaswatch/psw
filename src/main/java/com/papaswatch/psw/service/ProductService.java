@@ -1,15 +1,21 @@
 package com.papaswatch.psw.service;
 
-import com.papaswatch.psw.entity.Cart;
-import com.papaswatch.psw.entity.ProductLiked;
+import com.papaswatch.psw.entity.CartEntity;
+import com.papaswatch.psw.entity.ProductLikedEntity;
+import com.papaswatch.psw.entity.product.ProductEntity;
+import com.papaswatch.psw.entity.product.ProductImageEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.CartRepository;
 import com.papaswatch.psw.repository.ProductLikedRepository;
+import com.papaswatch.psw.repository.product.ProductJpaRepository;
+import com.papaswatch.psw.repository.product.recentView.CachedRecentViewedRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 @Slf4j
@@ -19,9 +25,16 @@ public class ProductService {
     private final UserService userService;
     private final CartRepository cartRepository;
     private final ProductLikedRepository productLikedRepository;
+    private final ProductJpaRepository productRepository;
+    private final CachedRecentViewedRepository recentViewedRepository;
+
+
+    // 최근 본 상품의 저장될 최대 갯수 지정
+    int MAX_RECENT_VIEWED_QUANTITY = 5;
 
     /**
      * 장바구니에 추가
+     *
      * @param productId
      * @param quantity
      * @param session
@@ -31,7 +44,7 @@ public class ProductService {
     public boolean addCart(long productId, int quantity, HttpSession session) {
         long userId = userService.getUserId(session);
         try {
-            cartRepository.save(Cart.create(userId, productId, quantity));
+            cartRepository.save(CartEntity.create(userId, productId, quantity));
             return true;
         } catch (Exception e) {
             log.error("failed to add cart to user {}", userId);
@@ -41,19 +54,20 @@ public class ProductService {
 
     /**
      * 장바구니에서 제거
+     *
      * @param cartId
      * @param session
      * @return
      */
     @Transactional
     public boolean removeCart(long cartId, HttpSession session) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(ApplicationException::CartDataNotFound);
-        long userIdInCart = cart.getUserId();
+        CartEntity cartEntity = cartRepository.findById(cartId).orElseThrow(ApplicationException::cartDataNotFound);
+        long userIdInCart = cartEntity.getUserId();
         long currentUserId = userService.getUserId(session);
         // 현재 접속한 유저의 아이디와 장바구니 정보에 저장된 유저 아이디가 같으면 해당 장바구니데이터를 삭제합니다
         if (userIdInCart == currentUserId) {
             try {
-                cartRepository.delete(cart);
+                cartRepository.delete(cartEntity);
                 return true;
             } catch (Exception e) {
                 log.error("failed to remove cart {}", userIdInCart);
@@ -65,6 +79,7 @@ public class ProductService {
 
     /**
      * 찜목록에 추가
+     *
      * @param productId
      * @param session
      * @return
@@ -73,7 +88,7 @@ public class ProductService {
     public boolean addProductLiked(long productId, HttpSession session) {
         long userId = userService.getUserId(session);
         try {
-            productLikedRepository.save(ProductLiked.create(userId, productId));
+            productLikedRepository.save(ProductLikedEntity.create(userId, productId));
             return true;
         } catch (Exception e) {
             log.error("failed to add product liked to user {}", userId);
@@ -83,6 +98,7 @@ public class ProductService {
 
     /**
      * 찜목록에서 삭제
+     *
      * @param productId
      * @param session
      * @return
@@ -90,11 +106,11 @@ public class ProductService {
     @Transactional
     public boolean deleteProductLiked(long productId, HttpSession session) {
         long currentUserId = userService.getUserId(session);
-        ProductLiked productLiked = productLikedRepository.findById(productId).orElseThrow(ApplicationException::ProductLikedNotFound);
+        ProductLikedEntity productLikedEntity = productLikedRepository.findById(productId).orElseThrow(ApplicationException::productLikedNotFound);
 
-        if (productLiked.getUserId() == currentUserId) {
+        if (productLikedEntity.getUserId() == currentUserId) {
             try {
-                productLikedRepository.delete(productLiked);
+                productLikedRepository.delete(productLikedEntity);
                 return true;
             } catch (Exception e) {
                 log.error("failed to remove product liked to user {}", currentUserId);
@@ -103,4 +119,46 @@ public class ProductService {
         }
         return false;
     }
+
+    /**
+     * 최근 본 상품 추가
+     * @param productId
+     * @param session
+     * @return
+     */
+    @Transactional
+    public List<Long> addRecentViewedProduct(long productId, HttpSession session) {
+        long loginUserId = userService.getUserId(session);
+
+        // 현재 접속중인 유저의 id의 Queue 정보를 가져옵니다. 없으면 새로운 Queue를 넣어줍니다.
+        Queue<Long> userQueue = recentViewedRepository.getRecentViewedProductQueue(loginUserId);
+        if (userQueue == null) {
+            userQueue = new ArrayDeque<>();
+        }
+        log.debug("check user :: {} recent viewed :: {}", loginUserId, userQueue.toString());
+
+        //최근 본 상품의 크기가 5 이상이면 우선 한개 빼고 시작
+        if (userQueue.size() >= MAX_RECENT_VIEWED_QUANTITY) {
+            userQueue.poll();
+        }
+
+        // 추가 될 최근 본 상품에 대한 정보를 생성합니다.
+        userQueue.offer(productId);
+        recentViewedRepository.saveRecentViewedProduct(loginUserId, userQueue);
+
+        return createRecentViewedProductResponse(userQueue);
+    }
+
+    /**
+     * 유저의 최근 본 상품 Response 데이터를 생성합니다.
+     * @param recentViewedQueue
+     * @return
+     */
+    public List<Long> createRecentViewedProductResponse(Queue<Long> recentViewedQueue) {
+        List<Long> response = new ArrayList<>(recentViewedQueue);
+        Collections.reverse(response);
+        log.debug("check recent viewed response :: {}", response.toString());
+        return response;
+    }
+
 }

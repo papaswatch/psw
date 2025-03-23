@@ -6,15 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "cart", schema = "papas")
 @AllArgsConstructor(staticName = "of")
 @NoArgsConstructor
 @Getter
-@Table(name = "product_liked", schema = "papas")
-public class ProductLiked {
+public class CartEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_liked_id")
-    private long productLikedId;
+    @Column(name = "cart_id")
+    private long cartId;
 
     @Column(name = "user_id")
     private long userId;
@@ -22,7 +23,10 @@ public class ProductLiked {
     @Column(name = "product_id")
     private long productId;
 
-    public static ProductLiked create(long userId, long productId) {
-        return new ProductLiked(0L, userId, productId);
+    @Column(name = "product_count")
+    private int productCount;
+
+    public static CartEntity create(long userId, long productId, int productCount) {
+        return new CartEntity(0L, userId, productId, productCount);
     }
 }

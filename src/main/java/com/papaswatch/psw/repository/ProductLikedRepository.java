@@ -1,7 +1,7 @@
 package com.papaswatch.psw.repository;
 
-import com.papaswatch.psw.entity.ProductLiked;
+import com.papaswatch.psw.entity.ProductLikedEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductLikedRepository extends JpaRepository<ProductLiked, Long> {
+public interface ProductLikedRepository extends JpaRepository<ProductLikedEntity, Long> {
 }
