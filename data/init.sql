@@ -102,7 +102,7 @@ CREATE TABLE papas.order
     order_amount int NULL
 );
 
-CREATE TABLE papas.cartEntity
+CREATE TABLE papas.cart
 (
     cart_id       serial NOT NULL,
     user_id       serial NOT NULL,
@@ -204,7 +204,7 @@ ALTER TABLE papas.comments
 ALTER TABLE papas.order
     ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);
 
-ALTER TABLE papas.cartEntity
+ALTER TABLE papas.cart
     ADD CONSTRAINT PK_CART PRIMARY KEY (cart_id);
 
 ALTER TABLE papas.product_image

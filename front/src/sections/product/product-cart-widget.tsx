@@ -38,7 +38,7 @@ export function CartIcon({ totalItems, sx, ...other }: Props) {
       {...other}
     >
       <Badge showZero badgeContent={totalItems} color="error" max={99}>
-        <Iconify icon="solar:cartEntity-3-bold" width={24} />
+        <Iconify icon="solar:cart-3-bold" width={24} />
       </Badge>
     </Box>
   );
