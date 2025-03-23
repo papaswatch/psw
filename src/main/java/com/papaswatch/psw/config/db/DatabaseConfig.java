@@ -1,7 +1,9 @@
 package com.papaswatch.psw.config.db;
 
 import com.papaswatch.psw.config.Constant;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.zaxxer.hikari.HikariDataSource;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -49,6 +51,11 @@ public class DatabaseConfig {
         entityManagerFactoryBean.setJpaProperties(properties);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         return entityManagerFactoryBean;
+    }
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory(EntityManager em) {
+        return new JPAQueryFactory(em);
     }
 
     @Bean(Constant.DB.TX)

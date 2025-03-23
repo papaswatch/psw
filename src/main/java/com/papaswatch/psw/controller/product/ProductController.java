@@ -2,7 +2,9 @@ package com.papaswatch.psw.controller.product;
 
 import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.dto.LoginUserInfo;
-import com.papaswatch.psw.dto.product.ProductInfo;
+import com.papaswatch.psw.dto.product.CreateProductRequest;
+import com.papaswatch.psw.dto.product.Product;
+import com.papaswatch.psw.dto.product.SearchProductRequest;
 import com.papaswatch.psw.service.product.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,14 @@ public class ProductController {
      * 상품을 등록한다.
      */
     @PostMapping
-    public Response<Boolean> addProduct(HttpSession httpSession, @RequestPart("productInfo") ProductInfo productInfo, @RequestPart("images") List<MultipartFile> imageFiles) {
+    public Response<Boolean> addProduct(HttpSession httpSession, @RequestPart("productInfo") CreateProductRequest productInfo, @RequestPart("images") List<MultipartFile> imageFiles) {
         LoginUserInfo user = (LoginUserInfo) httpSession.getAttribute(SESSION); // TODO: ArgumentResolver 로 처리할거임
         return Response.ok(productService.addProduct(user.getLoginId(), productInfo, imageFiles));
+    }
+
+    @GetMapping
+    public Response<List<Product>> getProducts(@ModelAttribute SearchProductRequest req) {
+        return Response.ok(productService.getProducts(req));
     }
 
     @PutMapping("/edit")

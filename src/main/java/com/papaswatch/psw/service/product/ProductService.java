@@ -1,21 +1,23 @@
 package com.papaswatch.psw.service.product;
 
 import com.papaswatch.psw.config.Constant;
-import com.papaswatch.psw.dto.product.ProductInfo;
+import com.papaswatch.psw.dto.product.CreateProductRequest;
+import com.papaswatch.psw.dto.product.Product;
+import com.papaswatch.psw.dto.product.ProductHashtag;
+import com.papaswatch.psw.dto.product.SearchProductRequest;
 import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.entity.product.HashtagEntity;
 import com.papaswatch.psw.entity.product.ProductEntity;
 import com.papaswatch.psw.entity.product.ProductHashtagMappEntity;
 import com.papaswatch.psw.entity.product.ProductImageEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
-import com.papaswatch.psw.repository.product.HashtagJpaRepository;
-import com.papaswatch.psw.repository.product.ProductHashtagMappJpaRepository;
-import com.papaswatch.psw.repository.product.ProductImageJpaRepository;
-import com.papaswatch.psw.repository.product.ProductJpaRepository;
+import com.papaswatch.psw.repository.product.*;
 import com.papaswatch.psw.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +27,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,13 +42,17 @@ public class ProductService {
 
     private final UserService userService;
 
+    private final ProductQuery productQuery;
     private final ProductJpaRepository productRepository;
     private final HashtagJpaRepository hashtagRepository;
     private final ProductHashtagMappJpaRepository productHashtagMappRepository;
     private final ProductImageJpaRepository productImageRepository;
 
+    /**
+     * 상품을 등록하는 메서드입니다.
+     */
     @Transactional(transactionManager = Constant.DB.TX)
-    public boolean addProduct(String loginId, ProductInfo productInfo, List<MultipartFile> imageFiles) {
+    public boolean addProduct(String loginId, CreateProductRequest productInfo, List<MultipartFile> imageFiles) {
         log.debug("productInfo: {}", productInfo);
         /* 사용자 검증. */
         UserInfoEntity userInfo = userService.getUserInfo(loginId);
@@ -58,21 +67,26 @@ public class ProductService {
                 userInfo);
 
         /* product 이미지 처리 */
-        List<ProductImageEntity> imageEntities = imageFiles.stream().map(it -> {
-            String originalFilename = it.getOriginalFilename();
+        List<ProductImageEntity> imageEntities = IntStream.range(0, imageFiles.size())
+                .mapToObj(i -> {
+                    MultipartFile it = imageFiles.get(i);
+                    String originalFilename = it.getOriginalFilename();
 
-            if (originalFilename == null) throw ApplicationException.badRequest();
+                    if (originalFilename == null) throw ApplicationException.badRequest();
 
-            int lastDot = originalFilename.lastIndexOf(".");
-            String name = originalFilename.substring(0, lastDot);
-            String extension = originalFilename.substring(lastDot + 1);
+                    int lastDot = originalFilename.lastIndexOf(".");
+                    String name = originalFilename.substring(0, lastDot);
+                    String extension = originalFilename.substring(lastDot + 1);
 
-            String uuid = UUID.randomUUID().toString();
-            String filePath = generatePath(uuid, extension);
-            saveFile(it, filePath);
+                    String uuid = UUID.randomUUID().toString();
+                    String filePath = generatePath(uuid, extension);
+                    saveFile(it, filePath);
 
-            return ProductImageEntity.createBy(name, uuid, filePath, extension);
-        }).toList();
+                    boolean isThumbnail = (i == 0); // 첫 번째 이미지만 썸네일 설정
+
+                    return ProductImageEntity.createBy(name, uuid, filePath, extension, isThumbnail);
+                }).toList();
+
         productEntity.addImages(imageEntities);
 
         /* 모두 저장 */
@@ -88,6 +102,21 @@ public class ProductService {
         }
 
         return true;
+    }
+
+    /**
+     * 상품 리스트를 읽는 메서드입니다.
+     */
+    @Transactional(transactionManager = Constant.DB.TX, readOnly = true)
+    public List<Product> getProducts(SearchProductRequest request) {
+        Pageable pageable = PageRequest.of(request.getPage() - 1, request.getRows());
+        List<Product> products = productQuery.findProductsBy(request, pageable);
+        List<Long> productIds = products.stream().map(Product::getProductId).toList();
+        List<ProductHashtag> productHashtags = productQuery.findProductHashtagsBy(productIds);
+        //Map<Long, List<ProductHashtag>> map = productHashtags.stream().collect(Collectors.groupingBy(ProductHashtag::getProductId));
+        Map<Long, List<String>> map = productHashtags.stream().collect(Collectors.groupingBy(ProductHashtag::getProductId, Collectors.mapping(ProductHashtag::getHashtag, Collectors.toList())));
+        products.forEach(it -> it.addHashtags(map.get(it.getProductId())));
+        return products;
     }
 
     /**
@@ -107,14 +136,15 @@ public class ProductService {
 
 //        String datetime = DateTimeUtils.currentYearToDateSlash();
 //        String directoryPath = String.format("%s\\%s\\%s\\%s", productDir, dir1, dir2, datetime);
-        String directoryPath = productImgDir + File.separator + dir1 + File.separator + dir2;
+        String hashDir = File.separator + dir1 + File.separator + dir2;
+        String directoryPath = productImgDir + hashDir;
         // 디렉토리 존재 확인 및 생성
         try {
             Files.createDirectories(Paths.get(directoryPath));
         } catch (IOException e) {
             throw new ApplicationException("Failed to create directories", e);
         }
-        return directoryPath + File.separator + uuid + "." + extension;
+        return hashDir + File.separator + uuid + "." + extension;
     }
 
     /**
@@ -122,7 +152,7 @@ public class ProductService {
      */
     private void saveFile(MultipartFile file, String filePath) {
         try {
-            file.transferTo(new File(filePath));
+            file.transferTo(new File(productImgDir + File.separator + filePath));
         } catch (IOException e) {
             throw new ApplicationException("Failed to save file", e);
         }

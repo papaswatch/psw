@@ -1,6 +1,5 @@
 package com.papaswatch.psw.dto.product;
 
-import com.papaswatch.psw.entity.product.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductInfo {
+public class CreateProductRequest {
     private String name;
     private String brand;
     private Integer price;

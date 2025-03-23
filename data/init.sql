@@ -66,7 +66,7 @@ CREATE TABLE papas.product
     contents   varchar(4000) NULL,
     brand      varchar(100) NULL,
     stock      bigint NULL,
-    user_id    varchar(50) NOT NULL,
+    user_id    integer NOT NULL,
     created_at timestamp NULL,
     updated_at timestamp NULL,
     liked      bigint NULL,
@@ -117,6 +117,7 @@ CREATE TABLE papas.product_image
     hash_name varchar(100) NOT NULL,
     file_path  varchar(200) NOT NULL,
     extension varchar(100) NOT NULL,
+    is_thumbnail boolean NOT NULL,
     product_id serial NOT NULL
 );
 

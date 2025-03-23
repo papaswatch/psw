@@ -30,19 +30,23 @@ public class ProductImageEntity {
     @Column(name = "extension")
     private String extension;
 
+    @Column(name = "is_thumbnail")
+    private Boolean isThumbnail;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    private ProductImageEntity(String originName, String hashName, String filePath, String extension) {
+    private ProductImageEntity(String originName, String hashName, String filePath, String extension, Boolean isThumbnail) {
         this.originName = originName;
         this.hashName = hashName;
         this.filePath = filePath;
         this.extension = extension;
+        this.isThumbnail = isThumbnail;
     }
 
-    public static ProductImageEntity createBy(String originName, String hashName, String filePath, String extension) {
-        return new ProductImageEntity(originName, hashName, filePath, extension);
+    public static ProductImageEntity createBy(String originName, String hashName, String filePath, String extension, Boolean isThumbnail) {
+        return new ProductImageEntity(originName, hashName, filePath, extension, isThumbnail);
     }
 
     public void setProductEntity(ProductEntity product) {
