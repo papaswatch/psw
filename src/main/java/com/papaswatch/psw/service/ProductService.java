@@ -9,6 +9,7 @@ import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.CartRepository;
 import com.papaswatch.psw.repository.ProductLikedRepository;
 import com.papaswatch.psw.repository.product.ProductJpaRepository;
+import com.papaswatch.psw.repository.product.recentView.CachedRecentViewedRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @Slf4j
@@ -27,9 +27,8 @@ public class ProductService {
     private final CartRepository cartRepository;
     private final ProductLikedRepository productLikedRepository;
     private final ProductJpaRepository productRepository;
+    private final CachedRecentViewedRepository recentViewedRepository;
 
-    // 각 유저별 최근 본 상품을 저장하는 Map, Key는 유저의 key값입니다.
-    ConcurrentHashMap<Long, Queue<ProductRecentViewed>> userRecentViewedProduct = new ConcurrentHashMap<>();
 
     // 최근 본 상품의 저장될 최대 갯수 지정
     int MAX_RECENT_VIEWED_QUANTITY = 5;
@@ -132,24 +131,25 @@ public class ProductService {
     public List<ProductRecentViewed> addRecentViewedProduct(long productId, HttpSession session) {
         long loginUserId = userService.getUserId(session);
 
-        // 유저의 최근 본 상품을 저장하는 Queue, 최대 5개까지 저장합니다.
-        Queue<ProductRecentViewed> recentViewedQueue = new ArrayDeque<>();
-
         // 현재 접속중인 유저의 id의 Queue 정보를 가져옵니다. 없으면 새로운 Queue를 넣어줍니다.
-        Queue<ProductRecentViewed> userRecentViewedProductQueue = userRecentViewedProduct.computeIfAbsent(loginUserId, user -> new ArrayDeque<>());
-        log.info("check user :: {} recent viewed :: {}", loginUserId, userRecentViewedProductQueue.toString());
+        Queue<ProductRecentViewed> userQueue = recentViewedRepository.getRecentViewedProductQueue(loginUserId);
+        if (userQueue == null) {
+            userQueue = new ArrayDeque<>();
+        }
+        log.debug("check user :: {} recent viewed :: {}", loginUserId, userQueue.toString());
 
         //최근 본 상품의 크기가 5 이상이면 우선 한개 빼고 시작
-        if (userRecentViewedProductQueue.size() >= MAX_RECENT_VIEWED_QUANTITY) {
-            userRecentViewedProductQueue.poll();
+        if (userQueue.size() >= MAX_RECENT_VIEWED_QUANTITY) {
+            userQueue.poll();
         }
 
         // 추가 될 최근 본 상품에 대한 정보를 생성합니다.
         ProductRecentViewed recentViewedProduct = createRecentViewedProduct(productId);
+        userQueue.offer(recentViewedProduct);
 
-        userRecentViewedProductQueue.offer(recentViewedProduct);
+        recentViewedRepository.saveRecentViewedProduct(loginUserId, userQueue);
 
-        return createRecentViewedProductResponse(userRecentViewedProductQueue);
+        return createRecentViewedProductResponse(userQueue);
     }
 
     /**
@@ -160,7 +160,7 @@ public class ProductService {
     public List<ProductRecentViewed> createRecentViewedProductResponse(Queue<ProductRecentViewed> recentViewedQueue) {
         List<ProductRecentViewed> response = new ArrayList<>(recentViewedQueue);
         Collections.reverse(response);
-        log.info("check recent viewed response :: {}", response.toString());
+        log.debug("check recent viewed response :: {}", response.toString());
         return response;
     }
 
