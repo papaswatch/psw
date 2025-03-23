@@ -1,7 +1,6 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.SellerValidateReq;
-import com.papaswatch.psw.entity.EnrollSellerProcess;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

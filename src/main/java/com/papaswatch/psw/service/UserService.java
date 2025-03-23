@@ -63,4 +63,28 @@ public class UserService {
         session.invalidate();
         log.info("User :: {} logout", session.getId());
     }
+
+    /**
+     * Session을 받아서 로그인된 유저의 userId를 반환합니다.
+     * @param session
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public long getUserId(HttpSession session) {
+        UserInfoEntity user = (UserInfoEntity) session.getAttribute(SESSION);
+        UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::userNotFound);
+        return userInfoEntity.getUserId();
+    }
+
+    /**
+     * Session을 받아서 로그인된 유저의 LoginId를 반환합니다.
+     * @param session
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public String getUserLoginId(HttpSession session) {
+        UserInfoEntity user = (UserInfoEntity) session.getAttribute(SESSION);
+        UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::userNotFound);
+        return userInfoEntity.getLoginId();
+    }
 }

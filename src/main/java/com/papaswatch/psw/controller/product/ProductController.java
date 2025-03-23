@@ -38,9 +38,9 @@ public class ProductController {
         return Response.ok(productService.getProducts(req));
     }
 
-    @PutMapping("/edit")
+    @PutMapping
     public void editProduct() {}
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     public void deleteProduct() {}
 }
