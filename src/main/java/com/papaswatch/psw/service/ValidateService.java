@@ -1,7 +1,7 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.common.dto.SellerValidateReq;
-import com.papaswatch.psw.entity.EnrollSellerProcess;
+import com.papaswatch.psw.entity.EnrollSellerProcessEntity;
 import com.papaswatch.psw.entity.UserInfoEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.EnrollSellerProcessRepository;
@@ -58,8 +58,8 @@ public class ValidateService {
     @Transactional
     public void registerSellerRequest(SellerValidateReq sellerValidateReq) {
         UserInfoEntity userInfo = userRepository.findByLoginId(sellerValidateReq.getUserId()).orElseThrow(ApplicationException::UserNotFound);
-        EnrollSellerProcess enrollSellerProcessData = EnrollSellerProcess.create(userInfo.getUserId(), Boolean.TRUE, Boolean.TRUE);
-        enrollSellerProcessRepository.save(enrollSellerProcessData);
+        EnrollSellerProcessEntity enrollSellerProcessEntityData = EnrollSellerProcessEntity.create(userInfo.getUserId(), Boolean.TRUE, Boolean.TRUE);
+        enrollSellerProcessRepository.save(enrollSellerProcessEntityData);
     }
 
     /**
@@ -68,28 +68,28 @@ public class ValidateService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<EnrollSellerProcess> findByStatusIn(List<String> statusList) {
+    public List<EnrollSellerProcessEntity> findByStatusIn(List<String> statusList) {
         return enrollSellerProcessRepository.findByStatusIn(statusList).orElseThrow(ApplicationException::SellerNotFound);
     }
 
     @Transactional
     public void approveSeller(Long userId, String reviewer) {
-        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
-        enrollSellerProcess.approve(reviewer);
-        enrollSellerProcessRepository.save(enrollSellerProcess);
+        EnrollSellerProcessEntity enrollSellerProcessEntity = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
+        enrollSellerProcessEntity.approve(reviewer);
+        enrollSellerProcessRepository.save(enrollSellerProcessEntity);
     }
 
     @Transactional
     public void rejectSeller(Long userId, String reviewer,String rejectReason) {
-        EnrollSellerProcess enrollSellerProcess = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
-        enrollSellerProcess.reject(reviewer, rejectReason);
-        enrollSellerProcessRepository.save(enrollSellerProcess);
+        EnrollSellerProcessEntity enrollSellerProcessEntity = enrollSellerProcessRepository.findById(userId).orElseThrow(ApplicationException::SellerNotFound);
+        enrollSellerProcessEntity.reject(reviewer, rejectReason);
+        enrollSellerProcessRepository.save(enrollSellerProcessEntity);
     }
 
     @Transactional
     public void failedAtValidate(String userId, Boolean isBankInfoValid, Boolean isCertificateValid) {
         UserInfoEntity userInfo = userRepository.findByLoginId(userId).orElseThrow(ApplicationException::UserNotFound);
-        EnrollSellerProcess FailedEnrollSellerProcess = EnrollSellerProcess.failedAtValidate(userInfo.getUserId(), isBankInfoValid, isCertificateValid);
-        enrollSellerProcessRepository.save(FailedEnrollSellerProcess);
+        EnrollSellerProcessEntity failedEnrollSellerProcessEntity = EnrollSellerProcessEntity.failedAtValidate(userInfo.getUserId(), isBankInfoValid, isCertificateValid);
+        enrollSellerProcessRepository.save(failedEnrollSellerProcessEntity);
     }
 }

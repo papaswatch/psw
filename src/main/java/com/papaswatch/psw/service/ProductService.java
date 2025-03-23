@@ -1,8 +1,8 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.dto.ProductRecentViewed;
-import com.papaswatch.psw.entity.Cart;
-import com.papaswatch.psw.entity.ProductLiked;
+import com.papaswatch.psw.entity.CartEntity;
+import com.papaswatch.psw.entity.ProductLikedEntity;
 import com.papaswatch.psw.entity.product.ProductEntity;
 import com.papaswatch.psw.entity.product.ProductImageEntity;
 import com.papaswatch.psw.exceptions.ApplicationException;
@@ -46,7 +46,7 @@ public class ProductService {
     public boolean addCart(long productId, int quantity, HttpSession session) {
         long userId = userService.getUserId(session);
         try {
-            cartRepository.save(Cart.create(userId, productId, quantity));
+            cartRepository.save(CartEntity.create(userId, productId, quantity));
             return true;
         } catch (Exception e) {
             log.error("failed to add cart to user {}", userId);
@@ -63,13 +63,13 @@ public class ProductService {
      */
     @Transactional
     public boolean removeCart(long cartId, HttpSession session) {
-        Cart cart = cartRepository.findById(cartId).orElseThrow(ApplicationException::CartDataNotFound);
-        long userIdInCart = cart.getUserId();
+        CartEntity cartEntity = cartRepository.findById(cartId).orElseThrow(ApplicationException::CartDataNotFound);
+        long userIdInCart = cartEntity.getUserId();
         long currentUserId = userService.getUserId(session);
         // 현재 접속한 유저의 아이디와 장바구니 정보에 저장된 유저 아이디가 같으면 해당 장바구니데이터를 삭제합니다
         if (userIdInCart == currentUserId) {
             try {
-                cartRepository.delete(cart);
+                cartRepository.delete(cartEntity);
                 return true;
             } catch (Exception e) {
                 log.error("failed to remove cart {}", userIdInCart);
@@ -90,7 +90,7 @@ public class ProductService {
     public boolean addProductLiked(long productId, HttpSession session) {
         long userId = userService.getUserId(session);
         try {
-            productLikedRepository.save(ProductLiked.create(userId, productId));
+            productLikedRepository.save(ProductLikedEntity.create(userId, productId));
             return true;
         } catch (Exception e) {
             log.error("failed to add product liked to user {}", userId);
@@ -108,11 +108,11 @@ public class ProductService {
     @Transactional
     public boolean deleteProductLiked(long productId, HttpSession session) {
         long currentUserId = userService.getUserId(session);
-        ProductLiked productLiked = productLikedRepository.findById(productId).orElseThrow(ApplicationException::ProductLikedNotFound);
+        ProductLikedEntity productLikedEntity = productLikedRepository.findById(productId).orElseThrow(ApplicationException::ProductLikedNotFound);
 
-        if (productLiked.getUserId() == currentUserId) {
+        if (productLikedEntity.getUserId() == currentUserId) {
             try {
-                productLikedRepository.delete(productLiked);
+                productLikedRepository.delete(productLikedEntity);
                 return true;
             } catch (Exception e) {
                 log.error("failed to remove product liked to user {}", currentUserId);

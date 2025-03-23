@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "enroll_seller_process", schema = "papas")
-public class EnrollSellerProcess {
+public class EnrollSellerProcessEntity {
     @Id
     @Column(name = "user_id")
     private long userId;
@@ -46,8 +46,8 @@ public class EnrollSellerProcess {
     @Column(name = "reject_reason")
     private String rejectReason;
 
-    public static EnrollSellerProcess create(Long userId, boolean bankValidation, boolean businessValidation) {
-        return new EnrollSellerProcess(userId, bankValidation, businessValidation, false, LocalDateTime.now(), null, null, "PENDING", null);
+    public static EnrollSellerProcessEntity create(Long userId, boolean bankValidation, boolean businessValidation) {
+        return new EnrollSellerProcessEntity(userId, bankValidation, businessValidation, false, LocalDateTime.now(), null, null, "PENDING", null);
     }
 
     public void approve(String reviewerId) {
@@ -63,7 +63,7 @@ public class EnrollSellerProcess {
         this.rejectReason = rejectReason;
     }
 
-    public static EnrollSellerProcess failedAtValidate(Long userId, boolean bankValidation, boolean businessValidation) {
-        return new EnrollSellerProcess(userId, bankValidation, businessValidation, false, LocalDateTime.now(), null, null, "REJECTED", "DENIED TO GET SELLER POSITION DUE TO FAILED AT VALIDATE");
+    public static EnrollSellerProcessEntity failedAtValidate(Long userId, boolean bankValidation, boolean businessValidation) {
+        return new EnrollSellerProcessEntity(userId, bankValidation, businessValidation, false, LocalDateTime.now(), null, null, "REJECTED", "DENIED TO GET SELLER POSITION DUE TO FAILED AT VALIDATE");
     }
 }
