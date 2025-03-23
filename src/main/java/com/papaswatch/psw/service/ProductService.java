@@ -63,7 +63,7 @@ public class ProductService {
      */
     @Transactional
     public boolean removeCart(long cartId, HttpSession session) {
-        CartEntity cartEntity = cartRepository.findById(cartId).orElseThrow(ApplicationException::CartDataNotFound);
+        CartEntity cartEntity = cartRepository.findById(cartId).orElseThrow(ApplicationException::cartDataNotFound);
         long userIdInCart = cartEntity.getUserId();
         long currentUserId = userService.getUserId(session);
         // 현재 접속한 유저의 아이디와 장바구니 정보에 저장된 유저 아이디가 같으면 해당 장바구니데이터를 삭제합니다
@@ -108,7 +108,7 @@ public class ProductService {
     @Transactional
     public boolean deleteProductLiked(long productId, HttpSession session) {
         long currentUserId = userService.getUserId(session);
-        ProductLikedEntity productLikedEntity = productLikedRepository.findById(productId).orElseThrow(ApplicationException::ProductLikedNotFound);
+        ProductLikedEntity productLikedEntity = productLikedRepository.findById(productId).orElseThrow(ApplicationException::productLikedNotFound);
 
         if (productLikedEntity.getUserId() == currentUserId) {
             try {
@@ -172,7 +172,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductRecentViewed createRecentViewedProduct(long productId) {
         // 최근 본 상품에 추가할 상품의 정보를 가져옵니다.
-        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(ApplicationException::ProductNotFound);
+        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(ApplicationException::productNotFound);
         
         String productName = productEntity.getName();
 
