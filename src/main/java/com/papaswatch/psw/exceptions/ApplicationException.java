@@ -65,4 +65,5 @@ public class ApplicationException extends RuntimeException {
     public static ApplicationException productNotFound() {
         return new ApplicationException("Product not found");
     }
+    public static ApplicationException reviewNotFount() {return new ApplicationException("Review not found");}
 }

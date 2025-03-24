@@ -86,4 +86,10 @@ public class ProductController {
         ReviewResponse reviewResponse = productService.addProductReview(productId, productReview, stars, session);
         return Response.ok(reviewResponse);
     }
+
+    @DeleteMapping("/review/{reviewId}")
+    public Response<Boolean> deleteProductReview(@PathVariable long reviewId, HttpSession session) {
+        boolean response = productService.deleteProductReview(reviewId, session);
+        return Response.ok(response);
+    }
 }

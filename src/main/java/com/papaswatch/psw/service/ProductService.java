@@ -313,4 +313,21 @@ public class ProductService {
 
         return ReviewResponse.fromEntity(savedReview);
     }
+
+    /**
+     * 제품 리뷰를 삭제합니다.
+     * @param reviewId
+     * @param session
+     * @return
+     */
+    @Transactional
+    public boolean deleteProductReview(long reviewId, HttpSession session) {
+        long userId = userService.getUserId(session);
+        ReviewEntity reviewEntity = reviewRepository.findById(reviewId).orElseThrow(ApplicationException::reviewNotFount);
+        if (!reviewEntity.getUser().getUserId().equals(userId)) {
+            return false;
+        }
+        reviewRepository.delete(reviewEntity);
+        return true;
+    }
 }
