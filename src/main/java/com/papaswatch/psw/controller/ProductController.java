@@ -4,6 +4,7 @@ import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.dto.LoginUserInfo;
 import com.papaswatch.psw.dto.product.CreateProductRequest;
 import com.papaswatch.psw.dto.product.Product;
+import com.papaswatch.psw.dto.product.ReviewResponse;
 import com.papaswatch.psw.dto.product.SearchProductRequest;
 import com.papaswatch.psw.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -78,5 +79,11 @@ public class ProductController {
     public Response<List<Long>> addRecentViewedProduct(@PathVariable long productId, HttpSession session) {
         List<Long> response = productService.addRecentViewedProduct(productId, session);
         return Response.ok(response);
+    }
+
+    @PostMapping("/review/{productId}")
+    public Response<ReviewResponse> addProductReview(@PathVariable long productId, @RequestParam String productReview, @RequestParam int stars, HttpSession session) {
+        ReviewResponse reviewResponse = productService.addProductReview(productId, productReview, stars, session);
+        return Response.ok(reviewResponse);
     }
 }
