@@ -4,10 +4,11 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { fCurrency } from 'src/utils/format-number';
-
 import { Label } from 'src/components/label';
 import { ColorPreview } from 'src/components/color-utils';
+import {Product} from "../../types/product-type";
+import {randomColors} from "../../_mock";
+import {IMG_URL} from "../../middleware/api/config";
 
 // ----------------------------------------------------------------------
 
@@ -21,11 +22,15 @@ export type ProductItemProps = {
   priceSale: number | null;
 };
 
-export function ProductItem({ product }: { product: ProductItemProps }) {
+const SLASH = "/"
+const DOT = "."
+
+export function ProductItem({ product }: { product: Product }) {
   const renderStatus = (
     <Label
       variant="inverted"
-      color={(product.status === 'sale' && 'error') || 'info'}
+      color="info"
+      // color={(product.status === 'sale' && 'error') || 'info'}
       sx={{
         zIndex: 9,
         top: 16,
@@ -34,7 +39,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
         textTransform: 'uppercase',
       }}
     >
-      {product.status}
+      NEW
     </Label>
   );
 
@@ -42,7 +47,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
     <Box
       component="img"
       alt={product.name}
-      src={product.coverUrl}
+      src={ IMG_URL + product.imgFilePath + SLASH + product.imgHashName + DOT + product.imgExtension }
       sx={{
         top: 0,
         width: 1,
@@ -55,25 +60,14 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
 
   const renderPrice = (
     <Typography variant="subtitle1">
-      <Typography
-        component="span"
-        variant="body1"
-        sx={{
-          color: 'text.disabled',
-          textDecoration: 'line-through',
-        }}
-      >
-        {product.priceSale && fCurrency(product.priceSale)}
-      </Typography>
-      &nbsp;
-      {fCurrency(product.price)}
+        {product?.price ? product.price.toLocaleString() : '-'}
     </Typography>
   );
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {product.status && renderStatus}
+        {renderStatus}
 
         {renderImg}
       </Box>
@@ -84,7 +78,7 @@ export function ProductItem({ product }: { product: ProductItemProps }) {
         </Link>
 
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={product.colors} />
+          <ColorPreview colors={randomColors()} />
           {renderPrice}
         </Box>
       </Stack>

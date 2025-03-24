@@ -14,6 +14,8 @@ import { CartIcon } from '../product-cart-widget';
 import { ProductFilters } from '../product-filters';
 
 import type { FiltersProps } from '../product-filters';
+import {useProductQuery} from "../../../middleware/query/product-query";
+import {useProductStore} from "../../../middleware/store/product-store";
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +65,10 @@ export function ProductsView() {
   const [openFilter, setOpenFilter] = useState(false);
 
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
+
+  const {productParam,} = useProductStore()
+
+  const {data: productData} = useProductQuery(productParam)
 
   const handleOpenFilter = useCallback(() => {
     setOpenFilter(true);
@@ -131,11 +137,11 @@ export function ProductsView() {
       </Box>
 
       <Grid container spacing={3}>
-        {_products.map((product) => (
-          <Grid key={product.id} xs={12} sm={6} md={3}>
+        {productData?.length ? productData?.map((product) => (
+          <Grid key={product.productId} xs={12} sm={6} md={3}>
             <ProductItem product={product} />
           </Grid>
-        ))}
+        )) : null}
       </Grid>
 
       <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />

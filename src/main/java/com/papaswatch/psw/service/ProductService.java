@@ -43,6 +43,9 @@ public class ProductService {
     // 최근 본 상품의 저장될 최대 갯수 지정
     private final int MAX_RECENT_VIEWED_QUANTITY = 5;
 
+    private final String DOT = ".";
+    private final String SLASH = "/";
+
     @Value("${images.product.dir}")
     private String productImgDir;
 
@@ -88,8 +91,8 @@ public class ProductService {
                     String extension = originalFilename.substring(lastDot + 1);
 
                     String uuid = UUID.randomUUID().toString();
-                    String filePath = generatePath(uuid, extension);
-                    saveFile(it, filePath);
+                    String filePath = generatePath(uuid);
+                    saveFile(it, filePath, uuid, extension);
 
                     boolean isThumbnail = (i == 0); // 첫 번째 이미지만 썸네일 설정
 
@@ -272,13 +275,13 @@ public class ProductService {
     /**
      * 파일 경로를 생성하고, 디렉토리가 없으면 생성하는 메서드
      */
-    private String generatePath(String uuid, String extension) {
+    private String generatePath(String uuid) {
         String dir1 = uuid.substring(0, 2);
         String dir2 = uuid.substring(2, 4);
 
 //        String datetime = DateTimeUtils.currentYearToDateSlash();
 //        String directoryPath = String.format("%s\\%s\\%s\\%s", productDir, dir1, dir2, datetime);
-        String hashDir = File.separator + dir1 + File.separator + dir2;
+        String hashDir = SLASH + dir1 + SLASH + dir2;
         String directoryPath = productImgDir + hashDir;
         // 디렉토리 존재 확인 및 생성
         try {
@@ -286,15 +289,15 @@ public class ProductService {
         } catch (IOException e) {
             throw new ApplicationException("Failed to create directories", e);
         }
-        return hashDir + File.separator + uuid + "." + extension;
+        return hashDir;
     }
 
     /**
      * 파일을 지정된 경로에 저장하는 메서드
      */
-    private void saveFile(MultipartFile file, String filePath) {
+    private void saveFile(MultipartFile file, String filePath, String uuid, String extension) {
         try {
-            file.transferTo(new File(productImgDir + File.separator + filePath));
+            file.transferTo(new File(productImgDir + SLASH + filePath + SLASH + uuid + DOT + extension));
         } catch (IOException e) {
             throw new ApplicationException("Failed to save file", e);
         }

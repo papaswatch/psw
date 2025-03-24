@@ -8,6 +8,7 @@ const api = axios.create({
   }
 });
 
+export const IMG_URL = import.meta.env.MODE === "development" ? "http://localhost:18080/psw/imgs" : "/psw/imgs"
 const apiUrl = import.meta.env.MODE === 'development' ? "http://localhost:18080/psw" : "/psw"
 
 export const API = {

@@ -27,7 +27,7 @@ public class ProductQuery {
      * 상품 리스트 검색을 `Product` dto 로 반환하여 응답.
      */
     public List<Product> findProductsBy(SearchProductRequest request, Pageable pageable) {
-        return query.select(new QProduct(productEntity.productId, productEntity.name, productEntity.contents, productEntity.brand, productEntity.stock, productEntity.price, productEntity.liked, userInfoEntity.name, productImageEntity.hashName, productImageEntity.extension))
+        return query.select(new QProduct(productEntity.productId, productEntity.name, productEntity.contents, productEntity.brand, productEntity.stock, productEntity.price, productEntity.liked, userInfoEntity.name, productImageEntity.filePath, productImageEntity.hashName, productImageEntity.extension))
                 .from(productEntity)
                 .join(userInfoEntity).on(userInfoEntity.userId.eq(productEntity.user.userId))
                 .join(productImageEntity).on(productEntity.productId.eq(productImageEntity.product.productId))

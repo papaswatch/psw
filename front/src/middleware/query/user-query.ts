@@ -1,8 +1,8 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import api, { API } from '../api/api';
 import { KeyValue, Response } from '../../types/common-type';
 import { LoginUserInfo, SellerBank, SignupInfo } from '../../types/user-type';
+import api, {API} from "../api/config";
 
 export const useLoginMutation = (): UseMutationResult<void, AxiosError, KeyValue<string, string>> => {
   return useMutation({

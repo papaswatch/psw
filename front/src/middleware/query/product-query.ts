@@ -1,10 +1,11 @@
-import {useMutation, UseMutationResult} from "@tanstack/react-query";
+import {useMutation, UseMutationResult, useQuery, UseQueryResult} from "@tanstack/react-query";
 import {AxiosError} from "axios";
-import {Product} from "../../types/product-type";
-import api, {API} from "../api/api";
+import {CreateProductReq, GetProductReq, Product} from "../../types/product-type";
+import api , {API} from "../api/config";
 import {Response} from "../../types/common-type";
+import {QueryKeys} from "./query-key";
 
-export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosError, { product: Product, images: File[] }> => {
+export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosError, { product: CreateProductReq, images: File[] }> => {
     return useMutation({
         mutationFn: async (req) => {
             const formData = new FormData();
@@ -29,5 +30,13 @@ export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosEr
             });
             return !!r?.data?.data
         }
+    })
+}
+
+export const useProductQuery = (req: GetProductReq | null): UseQueryResult<Product[], AxiosError> => {
+    return useQuery({
+        queryKey: [QueryKeys.PRODUCT, req],
+        queryFn: () => api.get<Response<Product[]>>(API.PRODUCT, { params: req }).then(r => r?.data?.data),
+        enabled: !!req && !!req?.page && !!req?.rows
     })
 }
