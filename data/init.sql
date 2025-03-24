@@ -54,14 +54,14 @@ CREATE TABLE papas.delivery
 
 CREATE TABLE papas.product_tag
 (
-    hashtag_id serial NOT NULL,
-    name     varchar(10) UNIQUE NOT NULL,
+    hashtag_id serial             NOT NULL,
+    name       varchar(10) UNIQUE NOT NULL,
     created_at timestamp null
 );
 
 CREATE TABLE papas.product
 (
-    product_id serial      NOT NULL,
+    product_id serial  NOT NULL,
     name       varchar(100) NULL,
     contents   varchar(4000) NULL,
     brand      varchar(100) NULL,
@@ -81,14 +81,15 @@ CREATE TABLE papas.user_role
     customer_rank varchar(10) NULL
 );
 
-CREATE TABLE papas.comments
+CREATE TABLE papas.review
 (
-    comment_id       serial NOT NULL,
-    comment_contents varchar(1000) NULL,
-    product_id       serial NOT NULL,
-    created_at       timestamp NULL,
-    user_id          serial NOT NULL,
-    edited_at        timestamp NULL
+    review_id       serial NOT NULL,
+    review_contents varchar(1000) NULL,
+    product_id      serial NOT NULL,
+    created_at      timestamp NULL,
+    user_id         serial NOT NULL,
+    updated_at      timestamp NULL,
+    stars           int    NOT NULL
 );
 
 CREATE TABLE papas.order
@@ -112,13 +113,13 @@ CREATE TABLE papas.cart
 
 CREATE TABLE papas.product_image
 (
-    img_id     serial NOT NULL,
-    origin_name varchar(100) NOT NULL,
-    hash_name varchar(100) NOT NULL,
-    file_path  varchar(200) NOT NULL,
-    extension varchar(100) NOT NULL,
-    is_thumbnail boolean NOT NULL,
-    product_id serial NOT NULL
+    img_id       serial       NOT NULL,
+    origin_name  varchar(100) NOT NULL,
+    hash_name    varchar(100) NOT NULL,
+    file_path    varchar(200) NOT NULL,
+    extension    varchar(100) NOT NULL,
+    is_thumbnail boolean      NOT NULL,
+    product_id   serial       NOT NULL
 );
 
 CREATE TABLE papas.product_order_mapp
@@ -154,9 +155,9 @@ CREATE TABLE papas.user_info
 
 CREATE TABLE papas.product_hashtag_mapp
 (
-    product_hashtag_id serial       NOT NULL,
-    product_id         integer       NOT NULL,
-    hashtag_id        integer NOT NULL
+    product_hashtag_id serial  NOT NULL,
+    product_id         integer NOT NULL,
+    hashtag_id         integer NOT NULL
 );
 
 CREATE TABLE papas.enroll_seller_process
@@ -199,8 +200,8 @@ ALTER TABLE papas.product
 ALTER TABLE papas.user_role
     ADD CONSTRAINT PK_USER_ROLE PRIMARY KEY (user_id);
 
-ALTER TABLE papas.comments
-    ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (comment_id);
+ALTER TABLE papas.review
+    ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (review_id);
 
 ALTER TABLE papas.order
     ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);

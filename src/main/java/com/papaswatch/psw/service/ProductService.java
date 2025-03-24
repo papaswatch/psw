@@ -1,17 +1,11 @@
 package com.papaswatch.psw.service;
 
 import com.papaswatch.psw.config.Constant;
-import com.papaswatch.psw.dto.product.CreateProductRequest;
-import com.papaswatch.psw.dto.product.Product;
-import com.papaswatch.psw.dto.product.ProductHashtag;
-import com.papaswatch.psw.dto.product.SearchProductRequest;
+import com.papaswatch.psw.dto.product.*;
 import com.papaswatch.psw.entity.CartEntity;
 import com.papaswatch.psw.entity.ProductLikedEntity;
 import com.papaswatch.psw.entity.UserInfoEntity;
-import com.papaswatch.psw.entity.product.HashtagEntity;
-import com.papaswatch.psw.entity.product.ProductEntity;
-import com.papaswatch.psw.entity.product.ProductHashtagMappEntity;
-import com.papaswatch.psw.entity.product.ProductImageEntity;
+import com.papaswatch.psw.entity.product.*;
 import com.papaswatch.psw.exceptions.ApplicationException;
 import com.papaswatch.psw.repository.CartRepository;
 import com.papaswatch.psw.repository.ProductLikedRepository;
@@ -55,6 +49,7 @@ public class ProductService {
     private final ProductHashtagMappJpaRepository productHashtagMappRepository;
     private final ProductImageJpaRepository productImageRepository;
     private final ProductQuery productQuery;
+    private final ReviewJpaRepository reviewRepository;
 
 
     /**
@@ -298,5 +293,41 @@ public class ProductService {
         } catch (IOException e) {
             throw new ApplicationException("Failed to save file", e);
         }
+    }
+
+    /**
+     * 제품 리뷰를 등록합니다.
+     * @param productId
+     * @param productReview
+     * @param stars
+     * @param session
+     */
+    @Transactional
+    public ReviewResponse addProductReview(long productId, String productReview, int stars, HttpSession session) {
+        String userLoginId = userService.getUserLoginId(session);
+        UserInfoEntity userInfo = userService.getUserInfo(userLoginId);
+        ProductEntity productEntity = productRepository.findById(productId).orElseThrow(ApplicationException::productNotFound);
+
+        ReviewEntity reviewEntity = ReviewEntity.of(productReview, productEntity, userInfo, stars);
+        ReviewEntity savedReview = reviewRepository.save(reviewEntity);
+
+        return ReviewResponse.fromEntity(savedReview);
+    }
+
+    /**
+     * 제품 리뷰를 삭제합니다.
+     * @param reviewId
+     * @param session
+     * @return
+     */
+    @Transactional
+    public boolean deleteProductReview(long reviewId, HttpSession session) {
+        long userId = userService.getUserId(session);
+        ReviewEntity reviewEntity = reviewRepository.findById(reviewId).orElseThrow(ApplicationException::reviewNotFount);
+        if (!reviewEntity.getUser().getUserId().equals(userId)) {
+            return false;
+        }
+        reviewRepository.delete(reviewEntity);
+        return true;
     }
 }
