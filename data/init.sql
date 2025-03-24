@@ -81,14 +81,14 @@ CREATE TABLE papas.user_role
     customer_rank varchar(10) NULL
 );
 
-CREATE TABLE papas.comments
+CREATE TABLE papas.review
 (
-    comment_id       serial NOT NULL,
-    comment_contents varchar(1000) NULL,
+    review_id       serial NOT NULL,
+    review_contents varchar(1000) NULL,
     product_id       serial NOT NULL,
     created_at       timestamp NULL,
     user_id          serial NOT NULL,
-    edited_at        timestamp NULL
+    updated_at       timestamp NULL
 );
 
 CREATE TABLE papas.order
@@ -199,8 +199,8 @@ ALTER TABLE papas.product
 ALTER TABLE papas.user_role
     ADD CONSTRAINT PK_USER_ROLE PRIMARY KEY (user_id);
 
-ALTER TABLE papas.comments
-    ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (comment_id);
+ALTER TABLE papas.review
+    ADD CONSTRAINT PK_COMMENTS PRIMARY KEY (review_id);
 
 ALTER TABLE papas.order
     ADD CONSTRAINT PK_ORDER PRIMARY KEY (order_id);
