@@ -31,4 +31,28 @@ public class ReviewEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserInfoEntity user;
+
+    @Column(name = "stars")
+    private int stars;
+
+    private ReviewEntity(
+            String reviewContents,
+            ProductEntity product,
+            UserInfoEntity user,
+            int stars
+    ) {
+        this.reviewContents = reviewContents;
+        this.product = product;
+        this.user = user;
+        this.stars = stars;
+    }
+
+    public static ReviewEntity of(
+            String reviewContents,
+            ProductEntity product,
+            UserInfoEntity user,
+            int stars
+    ) {
+        return new ReviewEntity(reviewContents, product, user, stars);
+    }
 }
