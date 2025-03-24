@@ -330,4 +330,15 @@ public class ProductService {
         reviewRepository.delete(reviewEntity);
         return true;
     }
+
+    public boolean updateProductReview(long reviewId, String productReview, int stars, HttpSession session) {
+        long userId = userService.getUserId(session);
+        ReviewEntity savedReviewEntity = reviewRepository.findById(reviewId).orElseThrow(ApplicationException::reviewNotFount);
+        if (!savedReviewEntity.getUser().getUserId().equals(userId)) {
+            return false;
+        }
+        ReviewEntity reviewEntity = ReviewEntity.of(productReview, savedReviewEntity.getProduct(), savedReviewEntity.getUser(), stars);
+        reviewRepository.save(reviewEntity);
+        return true;
+    }
 }
