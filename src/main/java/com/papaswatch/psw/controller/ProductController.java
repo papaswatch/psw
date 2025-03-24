@@ -39,13 +39,16 @@ public class ProductController {
     }
 
     @PutMapping
-    public void editProduct() {}
+    public void editProduct() {
+    }
 
     @DeleteMapping
-    public void deleteProduct() {}
+    public void deleteProduct() {
+    }
 
     /**
      * 특정 물품 단건을 장바구니에 담습니다.
+     *
      * @param productId
      * @param quantity
      * @param session
@@ -90,6 +93,12 @@ public class ProductController {
     @DeleteMapping("/review/{reviewId}")
     public Response<Boolean> deleteProductReview(@PathVariable long reviewId, HttpSession session) {
         boolean response = productService.deleteProductReview(reviewId, session);
+        return Response.ok(response);
+    }
+
+    @PutMapping("/review/{reviewId}")
+    public Response<Boolean> updateProductReview(@PathVariable long reviewId, @RequestParam String productReview, @RequestParam int stars, HttpSession session) {
+        boolean response = productService.updateProductReview(reviewId, productReview, stars, session);
         return Response.ok(response);
     }
 }
