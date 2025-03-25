@@ -1,5 +1,6 @@
 package com.papaswatch.psw.service;
 
+import com.papaswatch.psw.common.dto.PageData;
 import com.papaswatch.psw.config.Constant;
 import com.papaswatch.psw.dto.product.CreateProductRequest;
 import com.papaswatch.psw.dto.product.Product;
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -120,15 +122,17 @@ public class ProductService {
      * 상품 리스트를 읽는 메서드입니다.
      */
     @Transactional(transactionManager = Constant.DB.TX, readOnly = true)
-    public List<Product> getProducts(SearchProductRequest request) {
+    public PageData<Product> getProducts(SearchProductRequest request) {
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getRows());
-        List<Product> products = productQuery.findProductsBy(request, pageable);
+
+        Page<Product> findProducts = productQuery.findProductsPageBy(request, pageable);
+        List<Product> products = findProducts.getContent();
         List<Long> productIds = products.stream().map(Product::getProductId).toList();
         List<ProductHashtag> productHashtags = productQuery.findProductHashtagsBy(productIds);
         //Map<Long, List<ProductHashtag>> map = productHashtags.stream().collect(Collectors.groupingBy(ProductHashtag::getProductId));
         Map<Long, List<String>> map = productHashtags.stream().collect(Collectors.groupingBy(ProductHashtag::getProductId, Collectors.mapping(ProductHashtag::getHashtag, Collectors.toList())));
         products.forEach(it -> it.addHashtags(map.get(it.getProductId())));
-        return products;
+        return PageData.of(findProducts.getTotalElements(), products);
     }
 
 

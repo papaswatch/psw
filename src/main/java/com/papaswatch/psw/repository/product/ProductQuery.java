@@ -5,6 +5,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,6 +27,15 @@ public class ProductQuery {
 
     /**
      * 상품 리스트 검색을 `Product` dto 로 반환하여 응답.
+     */
+    public Page<Product> findProductsPageBy(SearchProductRequest request, Pageable pageable) {
+        List<Product> products = findProductsBy(request, pageable);
+        Long cnt = findProductCountBy(request);
+        return new PageImpl<>(products, pageable, cnt);
+    }
+
+    /**
+     * 상품 리스트를 불러올 때 사용한다.
      */
     public List<Product> findProductsBy(SearchProductRequest request, Pageable pageable) {
         return query.select(new QProduct(productEntity.productId, productEntity.name, productEntity.contents, productEntity.brand, productEntity.stock, productEntity.price, productEntity.liked, userInfoEntity.name, productImageEntity.filePath, productImageEntity.hashName, productImageEntity.extension))
@@ -53,6 +64,20 @@ public class ProductQuery {
 
     /////////////////////////////////////////////////////////////////////////
     // private method area..
+    /**
+     * 상품 검색 개수를 구할 때 사용한다.
+     * */
+    private Long findProductCountBy(SearchProductRequest request) {
+        Long cnt = query.select(productEntity.count())
+                .from(productEntity)
+                .join(userInfoEntity).on(userInfoEntity.userId.eq(productEntity.user.userId))
+                .join(productImageEntity).on(productEntity.productId.eq(productImageEntity.product.productId))
+                .where(keywordContains(request.getKeyword()), productImageEntity.isThumbnail.isTrue())
+                .fetchOne();
+        if (cnt == null) return 0L;
+        return cnt;
+    }
+
     private BooleanExpression keywordContains(String keyword) {
         if (!StringUtils.hasText(keyword)) return null;
         return productEntity.name.contains(keyword)

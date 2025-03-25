@@ -2,7 +2,7 @@ import {useMutation, UseMutationResult, useQuery, UseQueryResult} from "@tanstac
 import {AxiosError} from "axios";
 import {CreateProductReq, GetProductReq, Product} from "../../types/product-type";
 import api , {API} from "../api/config";
-import {Response} from "../../types/common-type";
+import {PageData, Response} from "../../types/common-type";
 import {QueryKeys} from "./query-key";
 
 export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosError, { product: CreateProductReq, images: File[] }> => {
@@ -33,10 +33,10 @@ export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosEr
     })
 }
 
-export const useProductQuery = (req: GetProductReq | null): UseQueryResult<Product[], AxiosError> => {
+export const useProductQuery = (req: GetProductReq | null): UseQueryResult<PageData<Product[]>, AxiosError> => {
     return useQuery({
         queryKey: [QueryKeys.PRODUCT, req],
-        queryFn: () => api.get<Response<Product[]>>(API.PRODUCT, { params: req }).then(r => r?.data?.data),
+        queryFn: () => api.get<Response<PageData<Product[]>>>(API.PRODUCT, { params: req }).then(r => r?.data?.data),
         enabled: !!req && !!req?.page && !!req?.rows
     })
 }

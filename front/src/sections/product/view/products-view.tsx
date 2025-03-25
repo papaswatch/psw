@@ -137,14 +137,14 @@ export function ProductsView() {
       </Box>
 
       <Grid container spacing={3}>
-        {productData?.length ? productData?.map((product) => (
+        {productData?.list?.length ? productData?.list?.map((product) => (
           <Grid key={product.productId} xs={12} sm={6} md={3}>
             <ProductItem product={product} />
           </Grid>
         )) : null}
       </Grid>
 
-      <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />
+      <Pagination count={Math.ceil((productData?.total || 0) / 24)} color="primary" sx={{ mt: 8, mx: 'auto' }} />
     </DashboardContent>
   );
 }

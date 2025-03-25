@@ -1,5 +1,6 @@
 package com.papaswatch.psw.controller;
 
+import com.papaswatch.psw.common.dto.PageData;
 import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.dto.LoginUserInfo;
 import com.papaswatch.psw.dto.product.CreateProductRequest;
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public Response<List<Product>> getProducts(@ModelAttribute SearchProductRequest req) {
+    public Response<PageData<Product>> getProducts(@ModelAttribute SearchProductRequest req) {
         return Response.ok(productService.getProducts(req));
     }
 
