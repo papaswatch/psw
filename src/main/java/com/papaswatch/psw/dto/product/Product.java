@@ -73,6 +73,7 @@ public class Product {
                 productEntity.getPrice(),
                 productEntity.getLiked(),
                 productEntity.getUser().getName(),
+                thumbnail != null ? thumbnail.getFilePath() : null,
                 thumbnail != null ? thumbnail.getHashName() : null,
                 thumbnail != null ? thumbnail.getExtension() : null
                 );

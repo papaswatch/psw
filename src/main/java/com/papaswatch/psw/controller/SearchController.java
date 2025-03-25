@@ -48,7 +48,7 @@ public class SearchController {
         searchService.getProductQNA(productId);
     }
 
-    @GetMapping("/qna/{productId}")
+    @GetMapping("/qna-reply/{productId}")
     public void getReplyProductQNA(@PathVariable long productId) {
         searchService.getReplyProductQNA(productId);
     }
