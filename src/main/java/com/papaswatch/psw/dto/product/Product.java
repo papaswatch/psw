@@ -1,5 +1,7 @@
 package com.papaswatch.psw.dto.product;
 
+import com.papaswatch.psw.entity.product.ProductEntity;
+import com.papaswatch.psw.entity.product.ProductImageEntity;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.ToString;
@@ -53,5 +55,24 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hashCode(productId);
+    }
+
+    public static Product fromProductEntity(ProductEntity productEntity) {
+        ProductImageEntity thumbnail = productEntity.getProductImages().stream()
+                .filter(ProductImageEntity::getIsThumbnail)
+                .findFirst().orElse(null);
+
+        return new Product(
+                productEntity.getProductId(),
+                productEntity.getName(),
+                productEntity.getContents(),
+                productEntity.getBrand(),
+                productEntity.getStock(),
+                productEntity.getPrice(),
+                productEntity.getLiked(),
+                productEntity.getUser().getName(),
+                thumbnail != null ? thumbnail.getHashName() : null,
+                thumbnail != null ? thumbnail.getExtension() : null
+                );
     }
 }

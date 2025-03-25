@@ -1,5 +1,7 @@
 package com.papaswatch.psw.controller;
 
+import com.papaswatch.psw.common.dto.Response;
+import com.papaswatch.psw.dto.product.Product;
 import com.papaswatch.psw.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +18,9 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/{productId}")
-    public void getProductById(@PathVariable long productId) {
-        searchService.getProductById(productId);
+    public Response<Product> getProductById(@PathVariable long productId) {
+        Product response = searchService.getProductById(productId);
+        return Response.ok(response);
     }
 
     @GetMapping("/simple/list")
