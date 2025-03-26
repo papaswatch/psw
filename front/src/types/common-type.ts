@@ -9,3 +9,8 @@ export type Response <T> = {
   status: string;
   data?: T;
 }
+
+export type PageData <T> = {
+  total: number;
+  list?: T;
+}

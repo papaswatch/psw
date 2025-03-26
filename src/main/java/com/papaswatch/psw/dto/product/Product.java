@@ -20,6 +20,7 @@ public class Product {
     private final Integer price;
     private final Long liked;
     private final String seller;
+    private final String imgFilePath;
     private final String imgHashName;
     private final String imgExtension;
 
@@ -27,7 +28,7 @@ public class Product {
 
     @QueryProjection
     public Product(Long productId, String name, String contents, String brand,
-                   Integer stock, Integer price, Long liked, String seller, String imgHashName, String imgExtension) {
+                   Integer stock, Integer price, Long liked, String seller, String imgFilePath, String imgHashName, String imgExtension) {
         this.productId = productId;
         this.name = name;
         this.contents = contents;
@@ -36,6 +37,7 @@ public class Product {
         this.price = price;
         this.liked = liked;
         this.seller = seller;
+        this.imgFilePath = imgFilePath;
         this.imgHashName = imgHashName;
         this.imgExtension = imgExtension;
     }
@@ -71,6 +73,7 @@ public class Product {
                 productEntity.getPrice(),
                 productEntity.getLiked(),
                 productEntity.getUser().getName(),
+                thumbnail != null ? thumbnail.getFilePath() : null,
                 thumbnail != null ? thumbnail.getHashName() : null,
                 thumbnail != null ? thumbnail.getExtension() : null
                 );

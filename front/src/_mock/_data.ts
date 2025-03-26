@@ -92,6 +92,19 @@ const COLORS = [
   '#FFC107',
 ];
 
+export const randomColors = (): string[]  => {
+  const first = Math.floor(Math.random() * 8);
+  let second = Math.floor(Math.random() * 8);
+  let third = Math.floor(Math.random() * 8);
+  while (first === second) {
+    second = Math.floor(Math.random() * 8);
+  }
+  while (third === first || third === second) {
+    third = Math.floor(Math.random() * 8);
+  }
+  return [COLORS[first], COLORS[second], COLORS[third]]
+}
+
 export const _products = [...Array(24)].map((_, index) => {
   const setIndex = index + 1;
 
