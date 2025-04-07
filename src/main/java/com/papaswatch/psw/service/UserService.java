@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.papaswatch.psw.config.Constant.USER.SESSION;
 
 @Slf4j
@@ -86,5 +88,21 @@ public class UserService {
         UserInfoEntity user = (UserInfoEntity) session.getAttribute(SESSION);
         UserInfoEntity userInfoEntity = userRepository.findByLoginId(user.getLoginId()).orElseThrow(ApplicationException::userNotFound);
         return userInfoEntity.getLoginId();
+    }
+
+    /**
+     * TEST 용도로 사용자를 만들고자 할 때 사용합니다.
+     */
+    @Transactional(transactionManager = Constant.DB.TX)
+    public void createAll(List<UserInfoEntity> list) {
+        userRepository.saveAll(list);
+    }
+
+    /**
+     * TEST 용도로 사용자를 모두 지우고자 할 때 사용합니다.
+     */
+    @Transactional(transactionManager = Constant.DB.TX)
+    public void deleteAll() {
+        userRepository.deleteAll();
     }
 }

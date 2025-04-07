@@ -7,6 +7,10 @@ logging:
   level:
     com.papaswatch: DEBUG
 
+init:
+  user:
+    size: 100
+
 spring:
   jpa:
     properties:
@@ -34,6 +38,8 @@ user.session.expired: 1800
 images:
   product:
     dir: ${PRODUCT_DIR:C:\workspace\papaswatch\psw\src\main\resources\products}
+  sample:
+    path: ${SAMPLE_DIR:C:\workspace\papaswatch\psw\sample}
 
 apis:
   # 국세청
