@@ -105,4 +105,8 @@ public class UserService {
     public void deleteAll() {
         userRepository.deleteAll();
     }
+
+    public List<UserInfoEntity> getAll() {
+        return userRepository.findAll();
+    }
 }
