@@ -18,7 +18,7 @@ public class HashtagGenerator {
 
     private static final Random random = new Random();
 
-    public static List<String> generateHashtags(int count) {
+    public List<String> generateHashtags(int count) {
         int cnt = random.nextInt(count) + 1;
         List<String> tagList = new ArrayList<>();
         Collections.addAll(tagList, TAGS);
@@ -37,7 +37,10 @@ public class HashtagGenerator {
     }
 
     public static void main(String[] args) {
-        List<String> hashtags = generateHashtags(5);
-        System.out.println(String.join(" ", hashtags));
+        HashtagGenerator generator = new HashtagGenerator();
+        for (int i = 0; i < 10; i++) {
+            List<String> hashtags = generator.generateHashtags(5);
+            System.out.println(String.join(" ", hashtags));
+        }
     }
 }

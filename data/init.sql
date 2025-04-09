@@ -52,7 +52,7 @@ CREATE TABLE papas.delivery
     delivery_complete timestamp NULL
 );
 
-CREATE TABLE papas.product_tag
+CREATE TABLE papas.hashtag
 (
     hashtag_id serial             NOT NULL,
     name       varchar(10) UNIQUE NOT NULL,
@@ -191,8 +191,8 @@ ALTER TABLE papas.product_discount
 ALTER TABLE papas.delivery
     ADD CONSTRAINT PK_DELIVERY PRIMARY KEY (delivery_id);
 
-ALTER TABLE papas.product_tag
-    ADD CONSTRAINT PK_PRODUCT_TAG PRIMARY KEY (hashtag_id);
+ALTER TABLE papas.hashtag
+    ADD CONSTRAINT PK_HASHTAG PRIMARY KEY (hashtag_id);
 
 ALTER TABLE papas.product
     ADD CONSTRAINT PK_PRODUCT PRIMARY KEY (product_id);

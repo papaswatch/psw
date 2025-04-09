@@ -8,13 +8,14 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static com.papaswatch.psw.config.Constant.DB.PAPAS_SCHEMA;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "product_tag", uniqueConstraints = @UniqueConstraint(columnNames = "name"), schema = PAPAS_SCHEMA)
+@Table(name = "hashtag", uniqueConstraints = @UniqueConstraint(columnNames = "name"), schema = PAPAS_SCHEMA)
 @Entity
 public class HashtagEntity {
     @Id
@@ -35,5 +36,18 @@ public class HashtagEntity {
 
     public static HashtagEntity of(String name) {
         return new HashtagEntity(name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HashtagEntity that = (HashtagEntity) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 }
