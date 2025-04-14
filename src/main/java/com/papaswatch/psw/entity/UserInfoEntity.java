@@ -58,3 +58,4 @@ public class UserInfoEntity {
         return new UserInfoEntity(loginId, password, name, email, phoneNumber);
     }
 }
+

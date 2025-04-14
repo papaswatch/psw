@@ -7,6 +7,10 @@ logging:
   level:
     com.papaswatch: DEBUG
 
+init:
+  user:
+    size: 100
+
 spring:
   jpa:
     properties:
@@ -24,7 +28,7 @@ spring:
   datasource:
     hikari:
       maximum-pool-size: 10
-    jdbc-url: jdbc:postgresql://localhost:5432/papaswatch
+    jdbc-url: jdbc:postgresql://localhost:15432/papaswatch
     driver-class-name: org.postgresql.Driver
     username: twave
     password: eva77
@@ -33,7 +37,11 @@ user.session.expired: 1800
 
 images:
   product:
-    dir: ${PRODUCT_DIR:C:\workspace\papaswatch\psw\src\main\resources\products}
+#    dir: ${PRODUCT_DIR:C:\workspace\papaswatch\psw\src\main\resources\products}
+    dir: ${PRODUCT_DIR:/Users/anseongjin/workspace/papaswatch/psw/src/main/resources/products}
+  sample:
+#    path: ${SAMPLE_DIR:C:\workspace\papaswatch\psw\sample}
+    path: ${SAMPLE_DIR:/Users/anseongjin/workspace/papaswatch/psw/sample}
 
 apis:
   # 국세청
