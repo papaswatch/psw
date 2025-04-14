@@ -98,6 +98,8 @@ public class InitializerService {
     /* 애플리케이션을 구동할 때, 임의의 상품을 생성하는 메서드이다. 판매자가 상품을 등록하는 것처럼 구현. */
     @Transactional(transactionManager = Constant.DB.TX)
     public void initializeSampleProduct() {
+        deleteProductDir();
+
         productHashtagMappRepository.deleteAll();
         productImageRepository.deleteAll();
         hashtagRepository.deleteAll();
@@ -147,6 +149,22 @@ public class InitializerService {
         productImageRepository.saveAll(productImageEntities);
         /* 상품 해시태그 매핑 영속화 */
         productHashtagMappRepository.saveAll(productHashtagMappEntities);
+    }
+
+    private void deleteProductDir() {
+        try {
+            Files.walk(Path.of(productImgDir))                        // 디렉토리 트리를 스트림으로 걷는다
+                    .sorted(Comparator.reverseOrder()) // 하위 → 상위 순으로 정렬
+                    .forEach(p -> {
+                        try {
+                            Files.delete(p);          // 파일/디렉토리 삭제
+                        } catch (IOException e) {
+                            throw new RuntimeException("삭제 실패: " + p, e);
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<ProductHashtagMappEntity> getProductHashtagMappEntities(Map<String, HashtagEntity> hashtagMap, ProductEntity productEntity) {
