@@ -51,7 +51,7 @@ export function Router() {
       ),
       /*  어쨋든 라우터에의해서 경로마다 아래 컴포넌트로 라우팅한다는 점.  */
       children: [
-        { element: <HomePage />, index: true },
+        { element: <ProductsPage />, index: true },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },

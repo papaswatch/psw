@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class SearchProductRequest {
-    private Integer page;
-    private Integer rows;
+    private Integer page = 1;
+    private Integer rows = 10;
 
     private String keyword;
-    private ProductOrder order;
+    private ProductOrder order = ProductOrder.RECENT_CREATED;
 }
