@@ -1,0 +1,5 @@
+images:
+  product:
+    dir: ${PRODUCT_DIR:/Users/anseongjin/workspace/papaswatch/psw/src/main/resources/products}
+  sample:
+    path: ${SAMPLE_DIR:/Users/anseongjin/workspace/papaswatch/psw/sample}
