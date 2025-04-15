@@ -12,6 +12,8 @@ init:
     size: 100
 
 spring:
+  profiles:
+    active: local-yss
   jpa:
     properties:
       hibernate:
@@ -20,7 +22,6 @@ spring:
         hbm2ddl:
           auto: none
         physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
         default_batch_fetch_size: 100
         jdbc:
           fetch_size: 100
@@ -34,14 +35,6 @@ spring:
     password: eva77
 
 user.session.expired: 1800
-
-images:
-  product:
-    dir: ${PRODUCT_DIR:C:\workspace\papaswatch\psw\src\main\resources\products}
-#    dir: ${PRODUCT_DIR:/Users/anseongjin/workspace/papaswatch/psw/src/main/resources/products}
-  sample:
-    path: ${SAMPLE_DIR:C:\workspace\papaswatch\psw\sample}
-#    path: ${SAMPLE_DIR:/Users/anseongjin/workspace/papaswatch/psw/sample}
 
 apis:
   # 국세청
