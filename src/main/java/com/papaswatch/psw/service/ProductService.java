@@ -130,6 +130,23 @@ public class ProductService {
         return PageData.of(findProducts.getTotalElements(), products);
     }
 
+    /**
+     * 이미지 저장
+     */
+    public Boolean uploadImage(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+
+        if (originalFilename == null) throw ApplicationException.badRequest();
+
+        int lastDot = originalFilename.lastIndexOf(".");
+        String name = originalFilename.substring(0, lastDot);
+        String extension = originalFilename.substring(lastDot + 1);
+
+        String uuid = UUID.randomUUID().toString();
+        String filePath = generatePath(uuid);
+        saveFile(file, filePath, uuid, extension);
+        return null;
+    }
 
     /**
      * 장바구니에 추가

@@ -34,6 +34,9 @@ public class ProductController {
         return Response.ok(productService.addProduct(user.getLoginId(), productInfo, imageFiles));
     }
 
+    /**
+     * 상품 리스트 조회 요청.
+     * */
     @GetMapping
     public Response<PageData<Product>> getProducts(@ModelAttribute SearchProductRequest req) {
         return Response.ok(productService.getProducts(req));
@@ -45,6 +48,14 @@ public class ProductController {
 
     @DeleteMapping
     public void deleteProduct() {
+    }
+
+    /**
+     * 상품 이미지 등록
+     * */
+    @PostMapping("/images")
+    public Response<Boolean> upload(@RequestPart("file") MultipartFile file) {
+        return Response.ok(productService.uploadImage(file));
     }
 
     /**

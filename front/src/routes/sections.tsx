@@ -19,6 +19,7 @@ export const SellerReqPage = lazy(() => import('src/pages/seller-request'));
 
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const ProductRegisterPage = lazy(() => import('src/pages/product-register'));
+export const ProductRegisterTestPage = lazy(() => import('src/pages/product-register-test'));
 
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
@@ -59,6 +60,7 @@ export function Router() {
         // { path: 'sign-up', element: <SignUpPage /> },
         { path: 'seller-req', element: <SellerReqPage /> },
         { path: 'product-reg', element: <ProductRegisterPage/> },
+        { path: 'product-reg2', element: <ProductRegisterTestPage/>}
       ],
     },
     {
