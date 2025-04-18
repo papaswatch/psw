@@ -6,6 +6,15 @@ export type CreateProductReq = {
     description: string;
     hashtags?: string[];
 }
+export type CreateProductReqV2 = {
+    name: string;
+    brand: string;
+    price: string;
+    stock: string;
+    description: string;
+    imageIds: number[];
+    hashtags?: string[];
+}
 
 export type ProductOrder =
     | "RECENT_CREATED"
@@ -38,3 +47,7 @@ export type Product = {
     hashtags: string[];
 }
 
+export type ProductImageUrl = {
+    id: number;
+    url: string;
+}

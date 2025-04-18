@@ -1,14 +1,19 @@
 import {useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
+import axios from "axios";
+
 import {TextField, Button, Card, CardContent, Typography, Grid, debounce, Chip, CardMedia} from "@mui/material";
+
 import Box from "@mui/material/Box";
-
 import {Editor} from "@toast-ui/react-editor";
-import '@toast-ui/editor/dist/toastui-editor.css';
 
+import '@toast-ui/editor/dist/toastui-editor.css';
 import {useModalStore} from "../../../middleware/store/modal-store";
-import {useProductRegisterMutation} from "../../../middleware/query/product-query";
+import {useProductRegisterMutation, useProductRegisterV2Mutation} from "../../../middleware/query/product-query";
+import {API, IMG_URL} from "../../../middleware/api/config";
+import {Response} from "../../../types/common-type";
+import {ProductImageUrl} from "../../../types/product-type";
 
 export default function ProductRegisterViewTest() {
 
@@ -21,32 +26,30 @@ export default function ProductRegisterViewTest() {
     console.log('📝 작성된 마크다운:', markdown);
   };
 
-  const {setModal} = useModalStore()
+  const { setModal, clearModal } = useModalStore()
 
-  const {mutateAsync: productMutateAsync} = useProductRegisterMutation()
+  const {mutateAsync: productMutateAsync} = useProductRegisterV2Mutation()
 
   const [name, setName] = useState<string>('')
   const [brand, setBrand] = useState<string>('')
   const [price, setPrice] = useState<string>('')
   const [stock, setStock] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
 
   const [hashtags, setHashtags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>("");
 
   const [images, setImages] = useState<FileList | null>(null)
+  const [usedImageUrls, setUsedImageUrls] = useState<ProductImageUrl[]>([]);
 
   const [errors, setErrors] = useState({
     name: "",
     brand: "",
     price: "",
     stock: "",
-    description: "",
-    images: "",
   })
 
   // 모든 필드가 유효한 경우 버튼 활성화
-  const isFormValid = Object.values(errors).every((err) => err === '') && !!name && !!brand && !!price && !!stock && !!description && !!images;
+  const isFormValid = Object.values(errors).every((err) => err === '') && !!name && !!brand && !!price && !!stock;
 
   // Debounce를 활용한 입력 검증 함수
   const validateInput = debounce((field: string, value: string) => {
@@ -69,9 +72,9 @@ export default function ProductRegisterViewTest() {
         newErrors.stock = stock.length < 1 ? '수량을 입력해주세요.' : '';
       }
 
-      if (field === 'description') {
-        newErrors.description = description.length < 1 ? '설명을 입력해주세요.' : '';
-      }
+      // if (field === 'description') {
+      //   newErrors.description = description.length < 1 ? '설명을 입력해주세요.' : '';
+      // }
 
       return newErrors;
     });
@@ -83,7 +86,6 @@ export default function ProductRegisterViewTest() {
     if (field === 'brand') setBrand(value);
     if (field === 'price') setPrice(value);
     if (field === 'stock') setStock(value);
-    if (field === 'description') setDescription(value);
 
     validateInput(field, value);
   };
@@ -120,7 +122,7 @@ export default function ProductRegisterViewTest() {
   };
 
   /* 제출 버튼 클릭 함수 */
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // console.log({
     //   name,
@@ -131,14 +133,29 @@ export default function ProductRegisterViewTest() {
     //   images,
     //   hashtags, // 해시태그 추가
     // });
-    if (images) {
-      productMutateAsync({ product: { name, brand, price, stock, description, hashtags }, images: Array.from(images) })
-          .then(r => console.log("success! r", r));
-    }
-  };
 
-  console.log("isFormValid:", isFormValid)
-  console.log("errors:", errors)
+    // if (images) {
+    //   productMutateAsync({ product: { name, brand, price, stock, description, hashtags }, images: Array.from(images) })
+    //       .then(r => console.log("success! r", r));
+    // }
+    const content = editorRef.current?.getInstance()?.getMarkdown();
+    if (!content) {
+      setModal({
+        isOpen: true,
+        header: '알림',
+        content: '내용을 입력해주세요.',
+        callback: async () => clearModal(),
+      })
+      return;
+    }
+
+    const imageIds = usedImageUrls.map(it => it.id)
+    productMutateAsync({ name, brand, price, stock, description: content, imageIds, hashtags })
+        .then(r => {
+          console.log("product save result:", r);
+          navigate('/')
+        });
+  };
 
   return (
       <>
@@ -218,6 +235,24 @@ export default function ProductRegisterViewTest() {
                 height="640px"
                 initialEditType="wysiwyg" // `markdown` 'wysiwyg' 가능
                 // useCommandShortcut={true}
+                hooks={{
+                  addImageBlobHook: async (blob, callback) => {
+                    try {
+                      const formData = new FormData();
+                      formData.append("file", blob);
+                      const res = await axios.post<Response<ProductImageUrl>>(API.IMAGES, formData, {
+                        headers: { "Content-Type": "multipart/form-data" },
+                      });
+                      if (res?.data?.data) {
+                        const productImageUrl = res.data.data
+                        setUsedImageUrls(prev => [...prev, productImageUrl])
+                        callback(IMG_URL + productImageUrl.url, `@${productImageUrl.id}@`);
+                      }
+                    } catch (error) {
+                      console.error("이미지 업로드 실패:", error);
+                    }
+                  }
+                }}
             />
           </CardMedia>
           <Grid item xs={12}>
@@ -226,7 +261,7 @@ export default function ProductRegisterViewTest() {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={!isFormValid}
+                // disabled={!isFormValid}
                 onClick={handleSubmit}
             >
               상품 등록

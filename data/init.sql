@@ -119,7 +119,7 @@ CREATE TABLE papas.product_image
     file_path    varchar(200) NOT NULL,
     extension    varchar(100) NOT NULL,
     is_thumbnail boolean      NOT NULL,
-    product_id   serial       NOT NULL
+    product_id   int       NULL
 );
 
 CREATE TABLE papas.product_order_mapp
