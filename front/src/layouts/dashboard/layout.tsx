@@ -105,7 +105,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                         { label: 'Profile', href: '#', icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" /> },
                         { label: 'Settings', href: '#', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
                         { label: '판매자신청', href: '/seller-req', icon: <Iconify width={22} icon="solar:settings-bold-duotone" /> },
-                        { label: '상품등록', href: '/product-reg', icon: <Iconify width={22} icon="solar:document-bold-duotone" /> },
+                        { label: '상품등록', href: '/product-reg2', icon: <Iconify width={22} icon="solar:document-bold-duotone" /> },
                         { label: '장바구니', href: '/cart', icon: <Iconify width={22} icon="solar:cart-bold-duotone" /> },
                         // <Iconify width={22} icon="solar:user-bold-duotone" />  // 사용자 아이콘
                         // <Iconify width={22} icon="solar:bell-bold-duotone" />  // 알림 아이콘
