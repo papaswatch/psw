@@ -12,8 +12,6 @@ init:
     size: 100
 
 spring:
-  profiles:
-    active: local-yss
   jpa:
     properties:
       hibernate:

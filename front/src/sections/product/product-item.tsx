@@ -1,14 +1,18 @@
+import React, {MouseEvent} from "react";
+import {useNavigate} from "react-router-dom";
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
+import Typography from '@mui/material/Typography';
 import { Label } from 'src/components/label';
 import { ColorPreview } from 'src/components/color-utils';
 import {Product} from "../../types/product-type";
 import {randomColors} from "../../_mock";
 import {IMG_URL} from "../../middleware/api/config";
+import {useProductStore} from "../../middleware/store/product-store";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +30,11 @@ const SLASH = "/"
 const DOT = "."
 
 export function ProductItem({ product }: { product: Product }) {
+
+  const navigate = useNavigate()
+
+  const {setSelectedProduct} = useProductStore()
+
   const renderStatus = (
     <Label
       variant="inverted"
@@ -64,15 +73,22 @@ export function ProductItem({ product }: { product: Product }) {
     </Typography>
   );
 
-  return (
+    const onClick = (e: MouseEvent<HTMLDivElement>) => {
+        if (product?.productId) {
+            setSelectedProduct(product)
+            navigate(`/products/${product.productId}`)
+        }
+    }
+
+    return (
     <Card>
-      <Box sx={{ pt: '100%', position: 'relative' }}>
+      <Box sx={{ pt: '100%', position: 'relative' }} onClick={onClick}>
         {renderStatus}
 
         {renderImg}
       </Box>
 
-      <Stack spacing={2} sx={{ p: 3 }}>
+      <Stack spacing={2} sx={{ p: 3 }} onClick={onClick}>
         <Link color="inherit" underline="hover" variant="subtitle2" noWrap>
           {product.name}
         </Link>

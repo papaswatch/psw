@@ -19,7 +19,9 @@ export const API = {
     ME: `${apiUrl}/user/me`,
     SELLER: `${apiUrl}/seller/validate`,
   },
-  PRODUCT: `${apiUrl}/products`
+  PRODUCT: `${apiUrl}/products`,
+  PRODUCT_V2: `${apiUrl}/products/v2`,
+  IMAGES: `${apiUrl}/products/images`
 };
 
 export default api;

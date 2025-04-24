@@ -3,10 +3,7 @@ package com.papaswatch.psw.controller;
 import com.papaswatch.psw.common.dto.PageData;
 import com.papaswatch.psw.common.dto.Response;
 import com.papaswatch.psw.dto.LoginUserInfo;
-import com.papaswatch.psw.dto.product.CreateProductRequest;
-import com.papaswatch.psw.dto.product.Product;
-import com.papaswatch.psw.dto.product.ReviewResponse;
-import com.papaswatch.psw.dto.product.SearchProductRequest;
+import com.papaswatch.psw.dto.product.*;
 import com.papaswatch.psw.service.ProductService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +31,15 @@ public class ProductController {
         return Response.ok(productService.addProduct(user.getLoginId(), productInfo, imageFiles));
     }
 
+    @PostMapping("/v2")
+    public Response<Boolean> addProductV2(HttpSession httpSession, @RequestBody CreateProductRequestV2 request) {
+        LoginUserInfo user = (LoginUserInfo) httpSession.getAttribute(SESSION);
+        return Response.ok(productService.addProductV2(user.getLoginId(), request));
+    }
+
+    /**
+     * 상품 리스트 조회 요청.
+     * */
     @GetMapping
     public Response<PageData<Product>> getProducts(@ModelAttribute SearchProductRequest req) {
         return Response.ok(productService.getProducts(req));
@@ -45,6 +51,14 @@ public class ProductController {
 
     @DeleteMapping
     public void deleteProduct() {
+    }
+
+    /**
+     * 상품 이미지 등록
+     * */
+    @PostMapping("/images")
+    public Response<ProductImageUrl> upload(@RequestPart("file") MultipartFile file) {
+        return Response.ok(productService.uploadImage(file));
     }
 
     /**

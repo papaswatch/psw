@@ -52,4 +52,8 @@ public class ProductImageEntity {
     public void setProductEntity(ProductEntity product) {
         this.product = product;
     }
+
+    public void setThumbnail() {
+        this.isThumbnail = true;
+    }
 }

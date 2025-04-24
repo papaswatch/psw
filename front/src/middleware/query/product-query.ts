@@ -1,6 +1,6 @@
 import {useMutation, UseMutationResult, useQuery, UseQueryResult} from "@tanstack/react-query";
 import {AxiosError} from "axios";
-import {CreateProductReq, GetProductReq, Product} from "../../types/product-type";
+import {CreateProductReq, CreateProductReqV2, GetProductReq, Product} from "../../types/product-type";
 import api , {API} from "../api/config";
 import {PageData, Response} from "../../types/common-type";
 import {QueryKeys} from "./query-key";
@@ -30,6 +30,12 @@ export const useProductRegisterMutation = (): UseMutationResult<boolean, AxiosEr
             });
             return !!r?.data?.data
         }
+    })
+}
+
+export const useProductRegisterV2Mutation = (): UseMutationResult<boolean, AxiosError, CreateProductReqV2> => {
+    return useMutation({
+        mutationFn: (req) => api.post<Response<boolean>>(API.PRODUCT_V2, req).then(r => !!r?.data?.data)
     })
 }
 

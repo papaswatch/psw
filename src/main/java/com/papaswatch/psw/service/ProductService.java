@@ -113,6 +113,42 @@ public class ProductService {
         return true;
     }
 
+    public Boolean addProductV2(String loginId, CreateProductRequestV2 request) {
+        /* 사용자 검증. */
+        UserInfoEntity userInfo = userService.getUserInfo(loginId);
+
+        /* 상품 엔티티 */
+        ProductEntity productEntity = ProductEntity.of(
+                request.getName(),
+                request.getDescription(),
+                request.getBrand(),
+                request.getStock(),
+                request.getPrice(),
+                userInfo);
+
+        /* 모두 저장 */
+        productRepository.save(productEntity);
+
+        List<ProductImageEntity> productImageEntities = productImageRepository.findByImgIdIn(request.getImageIds());
+        if (productImageEntities != null && !productImageEntities.isEmpty()) {
+            ProductImageEntity firstProductImageEntity = productImageEntities.getFirst();
+            firstProductImageEntity.setThumbnail();
+            productEntity.addImages(productImageEntities);
+            productImageRepository.saveAll(productImageEntities);
+        }
+
+        /* product tag 처리 */
+        List<String> hashtags = request.getHashtags();
+        if (hashtags != null && !hashtags.isEmpty()) {
+            List<HashtagEntity> hashtagEntities = hashtags.stream().map(this::findOrCreateHashtag).toList();
+            List<ProductHashtagMappEntity> productHashtagMappEntities = hashtagEntities.stream().map(it -> ProductHashtagMappEntity.of(it, productEntity)).toList();
+            productEntity.addHashtagMapps(productHashtagMappEntities);
+            productHashtagMappRepository.saveAll(productHashtagMappEntities);
+        }
+
+        return true;
+    }
+
     /**
      * 상품 리스트를 읽는 메서드입니다.
      */
@@ -129,6 +165,29 @@ public class ProductService {
         products.forEach(it -> it.addHashtags(map.get(it.getProductId())));
         return PageData.of(findProducts.getTotalElements(), products);
     }
+
+    /**
+     * 이미지 저장
+     */
+    @Transactional
+    public ProductImageUrl uploadImage(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+
+        if (originalFilename == null) throw ApplicationException.badRequest();
+
+        int lastDot = originalFilename.lastIndexOf(".");
+        String name = originalFilename.substring(0, lastDot);
+        String extension = originalFilename.substring(lastDot + 1);
+
+        String uuid = UUID.randomUUID().toString();
+        String filePath = generatePath(uuid);
+        saveFile(file, filePath, uuid, extension);
+        ProductImageEntity productImageEntity = ProductImageEntity.createBy(name, uuid, filePath, extension, false);
+        productImageRepository.save(productImageEntity);
+
+        return ProductImageUrl.of(productImageEntity.getImgId(), makeProductImageUrl(productImageEntity));
+    }
+
 
 
     /**
@@ -347,5 +406,9 @@ public class ProductService {
         ReviewEntity reviewEntity = ReviewEntity.of(productReview, savedReviewEntity.getProduct(), savedReviewEntity.getUser(), stars);
         reviewRepository.save(reviewEntity);
         return true;
+    }
+
+    private String makeProductImageUrl(ProductImageEntity entity) {
+        return entity.getFilePath() + SLASH + entity.getHashName() + DOT + entity.getExtension();
     }
 }
